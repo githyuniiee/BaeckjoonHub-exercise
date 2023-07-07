@@ -1,90 +1,49 @@
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.ArrayDeque;
- 
+import java.io.InputStreamReader;
+import java.util.*;
+
 public class Main {
-	public static void main(String[] args) throws IOException {
- 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
- 
-		ArrayDeque<Integer> dq = new ArrayDeque<Integer>();
-		StringBuilder sb = new StringBuilder();
- 
-		int N = Integer.parseInt(br.readLine());
- 
-		for (int i = 0; i < N; i++) {
- 
-			String[] s = br.readLine().split(" ");
- 
-			switch (s[0]) {
- 
-				case "push_front": {
-					dq.addFirst(Integer.parseInt(s[1]));
-					break;
-				}
-				
-				case "push_back": {
-					dq.addLast(Integer.parseInt(s[1]));
-					break;
-				}
- 
-				case "pop_front": {
-					if (dq.isEmpty()) {
-						sb.append(-1).append('\n');
-					} 
-					else {
-						sb.append(dq.pollFirst()).append('\n');
-					}
-					break;
-				}
- 
-				case "pop_back": {
-					if (dq.isEmpty()) {
-						sb.append(-1).append('\n');
-					} 
-					else {
-						sb.append(dq.pollLast()).append('\n');
-					}
-					break;
-				}
- 
-				case "size": {
-					sb.append(dq.size()).append('\n');
-					break;
-				}
- 
-				case "empty": {
-					if (dq.isEmpty()) {
-						sb.append(1).append('\n');
-					} 
-					else {
-						sb.append(0).append('\n');
-					}
-					break;
-				}
- 
-				case "front": {
-					if (dq.isEmpty()) {
-						sb.append(-1).append('\n');
-					} 
-					else {
-						sb.append(dq.peekFirst()).append('\n');
-					}
-					break;
-				}
- 
-				case "back": {
-					if (dq.isEmpty()) {
-						sb.append(-1).append('\n');
-					} 
-					else {
-						sb.append(dq.peekLast()).append('\n');
-					}
-					break;
-				}
-			}
-		}
-		System.out.println(sb);
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Deque<Integer> dq = new LinkedList<>();
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        int num = 0;
+
+        int n = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            switch (st.nextToken()) {
+                case "push_front":
+                    dq.addFirst(num = Integer.parseInt(st.nextToken()));
+                    break;
+                case "push_back":
+                    dq.addLast(num = Integer.parseInt(st.nextToken()));
+                    break;
+                case "pop_front":
+                    sb.append((dq.isEmpty() ? -1 : dq.removeFirst()) + "\n");
+                    break;
+                case "pop_back":
+                    sb.append((dq.isEmpty() ? -1 : dq.removeLast()) + "\n");
+                    break;
+                case "size":
+                    sb.append(dq.size() + "\n");
+                    break;
+                case "empty":
+                    sb.append((dq.isEmpty() ? 1 : 0) + "\n");
+                    break;
+                case "front":
+                    sb.append((dq.isEmpty() ? -1 : dq.peekFirst()) + "\n");
+                    break;
+                case "back":
+                    sb.append((dq.isEmpty() ? -1 : dq.peekLast()) + "\n");
+                    break;
+            }
+
+        }
+        System.out.println(sb);
+
+    }
 }
