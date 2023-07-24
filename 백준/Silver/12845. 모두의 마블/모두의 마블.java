@@ -22,15 +22,12 @@ public class Main {
         int maxLevel = init[0];
         int[] gold = new int[n - 1];
         gold[0] = init[0] + init[1];
-        int sum = 0;
+        int sum = gold[0];
 
 
         for (int i = 1; i < n - 1; i++) {
             gold[i] = init[i + 1] + maxLevel;
-        }
-
-        for (int j = 0; j < n-1; j++) {
-            sum += gold[j];
+            sum += gold[i];
         }
 
         System.out.println(sum);
