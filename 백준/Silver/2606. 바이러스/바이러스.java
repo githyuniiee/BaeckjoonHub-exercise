@@ -1,49 +1,46 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
-    static int map[][];
-    static boolean visit[];
-    static int n, m, v;
-    static int count = 0;
+   static int ComputerNum;
+   static int NetworkNum;
+   static boolean[][] graph;
+   static boolean[] visit;
+   static int count;
 
-    public static int dfs(int i) {
-        visit[i] = true;
-
-        for (int j = 1; j <= n; j++) {
-            if (map[i][j] == 1 && visit[j] == false) {
-                count++;
-                dfs(j);
+    static void dfs(int v) {
+        count ++;
+        visit[v] = true;
+        for (int i = 1; i <= ComputerNum; i++) {
+            if (!visit[i] && graph[v][i]) {
+                dfs(i);
             }
         }
-        return count;
     }
-        public static void main (String[]args) throws IOException {
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            n = Integer.parseInt(br.readLine());
-            m = Integer.parseInt(br.readLine());
-
-            v = 1;
-
-            map = new int[n + 1][n + 1];
-            visit = new boolean[n + 1];
-
-            for (int i = 0; i < m; i++) {
-                StringTokenizer st = new StringTokenizer(br.readLine());
-
-                int a = Integer.parseInt(st.nextToken());
-                int b = Integer.parseInt(st.nextToken());
-                map[a][b] = map[b][a] = 1;
-            }
-            System.out.println(dfs(1));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        ComputerNum = Integer.parseInt(br.readLine());
+        NetworkNum = Integer.parseInt(br.readLine());
+        graph = new boolean[ComputerNum+1][ComputerNum+1];
+        visit = new boolean[ComputerNum+1];
+        for (int i = 0; i < NetworkNum; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a1 = Integer.parseInt(st.nextToken());
+            int a2 = Integer.parseInt(st.nextToken());
+            graph[a1][a2] = true;
+            graph[a2][a1] = true;
+        }
+        count = 0;
+        dfs(1);
+        System.out.println(count-1);
 
         }
-    }
+}
+
 
 
 
