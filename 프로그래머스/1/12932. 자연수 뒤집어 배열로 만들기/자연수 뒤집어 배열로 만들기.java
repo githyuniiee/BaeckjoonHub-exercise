@@ -1,13 +1,17 @@
 class Solution {
     public int[] solution(long n) {
         
-        String s = String.valueOf(n); //자연수 문자로
+       String a = "" + n;
+        int[] answer = new int[a.length()];
         
-        int[] answer = new int[s.length()];
+        int cnt = 0;
         
-        for(int i=0; i<answer.length; i++){
-            answer[i] =Integer.parseInt(s.substring(answer.length-1-i, answer.length-i));
+        while(n > 0) {
+            answer[cnt] = (int)(n%10);
+            n/=10;
+            cnt++;
         }
+        
         return answer;
     }
 }
