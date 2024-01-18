@@ -2,21 +2,16 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] nums) {
-        int answer = 0;
-        HashMap<Integer, Integer> map = new HashMap<>();
         
-        for(Integer key : nums){
-            map.put(key, map.getOrDefault(key, 0) + 1);
+        HashSet<Integer> hs = new HashSet<>();
+        
+        for(int i=0; i<nums.length; i++){
+            hs.add(nums[i]);
         }
         
-        for(Integer key : map.keySet()){
-            answer++;
-        }
+        if(hs.size() > nums.length/2)
+            return nums.length/2;
         
-        if(answer > (nums.length/2)) {
-            answer = (nums.length/2);
-        }
-        
-        return answer;
+        return hs.size();
     }
 }
