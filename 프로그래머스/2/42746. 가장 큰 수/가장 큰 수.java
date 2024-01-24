@@ -1,32 +1,22 @@
 import java.util.*;
 
 class Solution {
-    public String solution(int[] numbers) {
-        String answer = "";
+    public String[] solution(int[] numbers) {
         
-        //문자열 배열
-        String[] arr = new String[numbers.length];
+        String[] arr = new String[numbers.length*(numbers.length-1)];
+        ArrayList<Integer> arr2 = new ArrayList<>();
         
-        //int -> String
-        for(int i=0; i<numbers.length; i++){
-            arr[i] = String.valueOf(numbers[i]);
+        String str = "";
+        for(int i=0; i<arr.length; i++){
+            for(int j=0; j<numbers.length; j++){
+                String num = Integer.toString(numbers[j]);
+                str += num;
+            }
+            arr[i] = str;
+            str = "";
         }
         
-        //내림차순 정렬
-        Arrays.sort(arr, new Comparator<String>(){
-            @Override
-            public int compare(String a, String b){
-                return (b+a).compareTo(a+b);
-            }
-        });
-        
-        //0값이 중복될 경우
-        if(arr[0].equals("0")) return "0";
-        
-        //이 아니면
-        for(String s: arr) answer += s;
-        
-        return answer;
+        return arr;
         
     }
 }
