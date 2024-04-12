@@ -2,10 +2,12 @@ import java.util.*;
 
 class Solution {
     public int solution(int N, int number) {
+      
         List<Set<Integer>> countList = new ArrayList<>();
         
-        for(int i=0; i<9; i++)
+        for(int i=0; i<9; i++){
             countList.add(new HashSet<>());
+        }
         
         countList.get(1).add(N);
         
@@ -18,25 +20,27 @@ class Solution {
                 
                 for(int preNum : preSet){
                     for(int postNum : postSet){
-                    countSet.add(preNum + postNum);
-                    countSet.add(preNum - postNum);
-                    countSet.add(preNum * postNum);
+                        countSet.add(preNum + postNum);
+                        countSet.add(preNum * postNum);
+                        countSet.add(preNum - postNum);
                         
                         if(preNum != 0 && postNum != 0){
-                    countSet.add(preNum / postNum);
-                }
+                            countSet.add(preNum / postNum);
+                        }
                     }
                 }
                 
+                countSet.add(Integer.parseInt(String.valueOf(N).repeat(i)));
             }
-             countSet.add(Integer.parseInt(String.valueOf(N).repeat(i)));
+            
+            for(Set<Integer> sub : countList){
+                if(sub.contains(number)){
+                    return countList.indexOf(sub);
+                }
+            }
+            
         }
-        for(Set<Integer> sub : countList){
-        if(sub.contains(number)){
-            return countList.indexOf(sub);
-        }
-    }
+     return -1;
         
-       return -1;   
     }
 }
