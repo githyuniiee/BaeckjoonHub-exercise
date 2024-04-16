@@ -13,29 +13,27 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n+1]; //입력 배열
-        int[] dp = new int[n+1]; //dp 배열
 
+        int[] arr = new int[n + 1];
+        int[] sum = new int[n+1];
+
+        int result = 0;
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i=1; i<=n; i++){
+        for (int i = 1; i <= n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int result = 0;
         for(int i=1; i<=n; i++){
-            //시작은 1
-            dp[i] = 1;
+            sum[i] = 1;
             for(int j=1; j<i; j++){
-                //시작값과 이전값 비교
                 if(arr[j] > arr[i]){
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-//                    System.out.println(i +" " + dp[i]);
+                    sum[i] = Math.max(sum[i], sum[j] + 1);
                 }
             }
-            result = Math.max(result, dp[i]);
+            result = Math.max(result, sum[i]);
         }
-        System.out.println(result);
 
+        System.out.println(result);
 
 
 
