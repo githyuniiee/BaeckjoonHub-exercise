@@ -3,30 +3,35 @@ import java.util.*;
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
      
-        int[] people = new int[n];
-        int answer = n;
+        //잃어버린 사람 빼기
+        int answer = n - lost.length;
         
-        for(int l : lost)
-            people[l-1]--;
+        Arrays.sort(lost);
+        Arrays.sort(reserve);
         
-        for(int r : reserve)
-            people[r-1]++;
-        
-        
-        for(int i=0; i<people.length; i++){
-            if(people[i] == -1){
-                if(i-1>=0 && people[i-1] == 1){
-                    people[i]++;
-                    people[i-1]--;
-                }else if(i+1<people.length && people[i+1] == 1){
-                    people[i]++;
-                    people[i+1]--;
-                }else{
-                    answer--;
+        //여벌을 챙겨온 사람이 도난당한 경우
+        for(int i=0; i<lost.length; i++){
+            for(int j=0; j<reserve.length; j++){
+                if(reserve[j] == lost[i]){
+                    answer++;
+                    lost[i] = reserve[j] = -1;
+                    break;
+                    
                 }
             }
         }
         
+        //체육복을 return
+        for(int lostPerson : lost) {
+            for(int i=0; i<reserve.length; i++){
+                if(reserve[i] == lostPerson +1 || reserve[i] == lostPerson -1){
+                    answer ++;
+                    reserve[i] = -1;
+                    break;
+                }
+            }
+        }
         return answer;
+
     }
 }
