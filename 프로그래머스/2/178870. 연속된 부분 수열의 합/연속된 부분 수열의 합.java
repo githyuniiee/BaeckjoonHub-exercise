@@ -2,27 +2,36 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] sequence, int k) {
-        int N = sequence.length;
-        int left = 0, right = N;
+   
+        
+        int left = 0;
+        int right = 0;
         int sum = 0;
-        for(int L=0,R=0; L < N; L++){
-            while(R < N && sum < k){
-                sum += sequence[R++];
+        int size = sequence.length;
+        int ans1 = 0;
+        int ans2 = 0;
+        
+        for(right = 0; right < sequence.length; right++){
+            sum += sequence[right];
+            
+            while(sum > k){
+                sum -= sequence[left];
+                left++;
             }
             
             if(sum == k){
-                int range = R-L-1;
-                if((right- left) > range){
-                    left = L;
-                    right = R-1;
+                if(size > right-left){
+                    size = right - left;
+                    ans1 = left;
+                    ans2 = right;
+                }
+                else if(size == right-left){
+                    ans1 = Math.min(ans1, left);
+                    ans2 = Math.min(ans2, right);
                 }
             }
-            
-            sum -= sequence[L];
         }
+        return new int[]{ans1, ans2};
         
-        int[] answer = {left, right};
-        
-        return answer;
     }
 }
