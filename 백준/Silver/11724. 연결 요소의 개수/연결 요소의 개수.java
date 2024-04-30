@@ -1,64 +1,57 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static ArrayList<ArrayList<Integer>> array;
-    public static boolean check[];
-    public static Queue<Integer> q;
-    public static int linkcount;
+    static int[][] graph;
+    static boolean[] visitied;
+    static int node, edge;
+    static int partionNum;
+    static int count;
 
-    public static void main(String args[]) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stk = new StringTokenizer(br.readLine());
+    static void dfs(int start) {
+        visitied[start] = true;
 
-        int n = Integer.parseInt(stk.nextToken());
-        int m = Integer.parseInt(stk.nextToken());
-
-        check = new boolean[n + 1];
-        linkcount = 0;
-
-        array = new ArrayList<ArrayList<Integer>>();
-        // 입력받은 정점 + 1개로 인덱스 1부터 시작.
-        for (int i = 0; i < n + 1; i++) {
-            array.add(new ArrayList<Integer>());
-        }
-
-        for (int i = 0; i < m; i++) {
-            stk = new StringTokenizer(br.readLine());
-            int u = Integer.parseInt(stk.nextToken());
-            int v = Integer.parseInt(stk.nextToken());
-
-            array.get(u).add(v);
-            array.get(v).add(u);
-        }
-
-        for (int i = 1; i <= n; i++) {
-            if (check[i] == false) {
-                //dfs(i);
-                bfs(i);
-                linkcount += 1;
+        for (int i = 1; i <= node; i++) {
+            if (graph[start][i] == 1 && !visitied[i]) {
+                dfs(i);
             }
         }
-
-        System.out.println(linkcount);
     }
-    
 
-    public static void bfs(int n){
-        q = new LinkedList<Integer>();
-        check[n] = true;
-        q.offer(n);
-        while (!q.isEmpty()){
-            int x = q.poll();
-            for (int i = 0; i < array.get(x).size(); i++){
-                int y = array.get(x).get(i);
-                if (check[y] == false){
-                    check[y] = true;
-                    q.offer(y);
-                }
+
+    public static void main(String[] args)throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        node = Integer.parseInt(st.nextToken());
+        edge = Integer.parseInt(st.nextToken());
+
+        graph = new int[node + 1][node + 1];
+        visitied = new boolean[node + 1];
+
+
+        while (edge --> 0) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+
+            graph[a][b] = graph[b][a] = 1;
+        }
+
+        for (int i = 1; i <= node; i++) {
+            if(!visitied[i]){
+                dfs(i);
+                partionNum++;
             }
         }
+
+
+        System.out.println(partionNum);
     }
 }
+
+
