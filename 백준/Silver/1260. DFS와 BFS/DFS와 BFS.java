@@ -6,75 +6,77 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
+    static StringBuilder sb = new StringBuilder();
+    static int n,m,v;
+    static int[][] graph;
+    static boolean[] visited;
+    static Queue<Integer> q = new LinkedList<>();
 
-	static StringBuilder sb = new StringBuilder();
-	static boolean[] check;
-	static int[][] arr;
-	
-	static int node, line, start;
-	
-	static Queue<Integer> q = new LinkedList<>();
+    static void dfs(int start){
+        visited[start] = true;
+        sb.append(start + " ");
 
-	public static void main(String[] args) throws IOException {
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		node = Integer.parseInt(st.nextToken());
-		line = Integer.parseInt(st.nextToken());
-		start= Integer.parseInt(st.nextToken());
-		
-		arr = new int[node+1][node+1];
-		check = new boolean[node+1];
-		
-		for(int i = 0 ; i < line ; i ++) {
-			StringTokenizer str = new StringTokenizer(br.readLine());
-			
-			int a = Integer.parseInt(str.nextToken());
-			int b = Integer.parseInt(str.nextToken());
-			
-			arr[a][b] = arr[b][a] =  1;	
-		}
-			//sb.append("\n");
-			dfs(start);
-			sb.append("\n");
-			check = new boolean[node+1];
-			
-			bfs(start);
-			
-			System.out.println(sb);
-		
-		}
-	public static void dfs(int start) {
-		
-		check[start] = true;
-		sb.append(start + " ");
-		
-		for(int i = 0 ; i <= node ; i++) {
-			if(arr[start][i] == 1 && !check[i])
-				dfs(i);
-		}
-		
-	}
-	
-	public static void bfs(int start) {
-		q.add(start);
-		check[start] = true;
-		
-		while(!q.isEmpty()) {
-			
-			start = q.poll();
-			sb.append(start + " ");
-			
-			for(int i = 1 ; i <= node ; i++) {
-				if(arr[start][i] == 1 && !check[i]) {
-					q.add(i);
-					check[i] = true;
-				}
-			}
-		}
-		
-		
-	}
+        for(int i=1; i<=n; i++){
+            if( graph[start][i] == 1 && !visited[i]){
+               dfs(i);
+            }
+        }
+    }
 
+    static void bfs(int start) {
+
+        //시작할 노드 번호 넣기
+        q.offer(start);
+
+        //시작 노드 방문 처리
+        visited[start] = true;
+
+        while (!q.isEmpty()) {
+            int nodeIndex = q.poll();
+            sb.append(nodeIndex + " ");
+
+            for (int i = 1; i <= n; i++) {
+
+                if (graph[nodeIndex][i] == 1 && !visited[i]) {
+                    visited[i] = true;
+                    q.offer(i);
+                }
+            }
+        }
+    }
+
+
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        v = Integer.parseInt(st.nextToken());
+
+        graph = new int[n + 1][n + 1];
+        visited = new boolean[n + 1];
+
+
+
+        for (int i = 0; i < m; i++) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+
+            graph[a][b] = 1;
+            graph[b][a] = 1;
+        }
+
+        dfs(v);
+        sb.append("\n");
+        visited = new boolean[n + 1];
+
+        bfs(v);
+
+        System.out.println(sb);
+    }
 }
+
+
