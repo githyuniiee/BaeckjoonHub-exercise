@@ -1,57 +1,61 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static List<Integer>[] relation;
-    static boolean[] checked;
-    static int res = -1;
+    static int n;
+    static int p1;
+    static int p2;
+    static int[][] graph;
+    static boolean[] visited;
+    static int count = 0;
+    static int answer = -1;
+
+
     public static void main(String[] args) throws IOException {
-        
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
 
-            int n = Integer.parseInt(br.readLine());
-            relation = new ArrayList[n+1];
-            checked = new boolean[n+1];
-            for(int i=1; i<n+1; i++) {
-                relation[i] = new ArrayList<>();
-            }
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        p1 = Integer.parseInt(st.nextToken());
+        p2 = Integer.parseInt(st.nextToken());
+        int t = Integer.parseInt(br.readLine());
 
-            StringTokenizer st = new StringTokenizer(br.readLine());
+        graph = new int[n+1][n+1];
+        visited = new boolean[n+1];
 
+        for (int i = 0; i < t; i++) {
+
+            st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
 
-            int l = Integer.parseInt(br.readLine());
-
-            for(int i=0; i<l; i++) {
-                st = new StringTokenizer(br.readLine());
-                int p = Integer.parseInt(st.nextToken());
-                int c = Integer.parseInt(st.nextToken());
-                relation[p].add(c);
-                relation[c].add(p);
-            }
-
-            dfs(x,y, 0);
-            System.out.println(res);
+            graph[x][y] = graph[y][x] = 1;
         }
 
-        static void dfs(int start, int end, int cnt) {
-            if(start == end) {
-                res = cnt;
-                return;
-            }
+        dfs(p1, count);
+        System.out.println(answer);
 
-            checked[start] = true;
-            for(int i=0; i<relation[start].size(); i++) {
-                int next = relation[start].get(i);
-                if(!checked[next]) {
-                    dfs(next, end, cnt+1);
-                }
+    }
+
+    public static void dfs(int start, int count){
+        visited[start] = true;
+
+        if(start == p2) {
+            answer = count;
+            return;
+        }
+
+        for(int i=1; i<=n; i++){
+            if(!visited[i] && graph[start][i] == 1){
+                dfs(i, count+1);
+
             }
+        }
+        
     }
 }
+
+
