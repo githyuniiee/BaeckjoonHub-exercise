@@ -1,66 +1,77 @@
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-class Main {
+public class Main {
+
+
     final static int MAX = 50 + 10;
-    static boolean map[][];
+    static int map[][];
     static boolean visited[][];
+    static int w,h;
     static int dirY[] = {-1, -1,-1, 0,0,1,1,1};
     static int dirX[] = {-1, 0, 1, -1, 1,-1,0,1};
-    static int N, M;
+    static int answer = 0;
 
-    static void dfs(int y, int x) {
+    public static void dfs(int y, int x){
+
         visited[y][x] = true;
-        for (int i = 0; i < 8; i++) {
-            int newY = y + dirY[i];
-            int newX = x + dirX[i];
-            if (map[newY][newX] && !visited[newY][newX])
-                dfs(newY, newX);
+        for(int i=0; i<8; i++){
+            int ny = y + dirY[i];
+            int nx = x + dirX[i];
+
+            if (!visited[ny][nx] && map[ny][nx] == 1) {
+
+                dfs(ny, nx);
+            }
+
+
         }
+
     }
 
     public static void main(String[] args) throws IOException {
-        // 0. 입력 및 초기화
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         while (true) {
             StringTokenizer st = new StringTokenizer(br.readLine());
 
-            M = Integer.parseInt(st.nextToken());
-            N = Integer.parseInt(st.nextToken());
+            w = Integer.parseInt(st.nextToken());
+            h = Integer.parseInt(st.nextToken());
 
-            if (N == 0 && M == 0) break;
+            if(w == 0 && h == 0) break;
 
-            map = new boolean[MAX][MAX];
+            map = new int[MAX][MAX];
             visited = new boolean[MAX][MAX];
 
-            // 1. map 정보 반영
-            for (int i = 1; i <= N; i++) {
+            for (int i = 1; i <= h; i++) {
                 st = new StringTokenizer(br.readLine());
-                for (int j = 1; j <= M; j++)
-                    map[i][j] = (Integer.parseInt(st.nextToken()) == 1);
+                for (int j = 1; j <= w; j++) {
+                    map[j][i] = Integer.parseInt(st.nextToken());
+                }
             }
 
-            // 2. dfs 수행
-            int answer = 0;
-            for (int i = 1; i <= N; i++)
-                for (int j = 1; j <= M; j++)
-                    if (map[i][j] && !visited[i][j]) {
-                        dfs(i, j);
+            //dfs
+            for (int i = 1; i <= h; i++) {
+
+                for (int j = 1; j <= w; j++) {
+                    if (map[j][i] == 1 && !visited[j][i]) {
+                        dfs(j, i);
                         answer++;
                     }
+                }
+            }
 
-            // 3. 출력
-            bw.write(String.valueOf(answer));
-            bw.newLine();
+            System.out.println(answer);
+            answer = 0;
+
+
         }
-
-        bw.close();
-        br.close();
     }
+
+
+
 }
