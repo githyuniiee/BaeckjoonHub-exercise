@@ -1,28 +1,34 @@
-import java.util.Scanner;
-import java.util.Arrays;
+import java.io.*;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	public static void main(String[] args) {
-		Scanner keyboard = new Scanner(System.in);
-		 
-		double arr[] = new double[keyboard.nextInt()];
-		
-		for(int i = 0; i < arr.length; i++) {
-			arr[i] = keyboard.nextDouble();
-		}
-	
-		
-		double sum = 0;
-		Arrays.sort(arr);
-		
-		for(int i = 0; i < arr.length; i++) {
-			sum += ((arr[i] / arr[arr.length-1]) * 100);
-		}
-		System.out.print(sum / arr.length);
 
-	}
-		
-	
+    public static void main(String[] args) throws Exception {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        double[] score = new double[n];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        double max = Integer.MIN_VALUE;
+        double avg = 0;
+
+        for(int i=0; i<n; i++){
+            score[i] = Integer.parseInt(st.nextToken());
+            max = Math.max(max, score[i]);
+        }
+
+
+        for(int i=0; i<n; i++){
+            score[i] = score[i]/max*100;
+            avg += score[i];
+        }
+
+        System.out.println(avg/n);
+
+
+
+
+    }
 
 }
