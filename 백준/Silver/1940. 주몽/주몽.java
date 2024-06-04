@@ -1,57 +1,44 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    public static void main(String[] args)throws IOException {
-
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         int n = Integer.parseInt(br.readLine());
         int m = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int start = 0;
-        int end = n-1;
-        int count = 0;
+        int arr[] = new int[n];
 
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
+
+        int start = 0;
+        int end = arr.length-1;
+        int answer = 0;
+
         Arrays.sort(arr);
-        int sum = arr[start] + arr[end];
 
         while(start < end){
 
-            if(sum == m){
-                sum = 0;
-                count++;
+            if(arr[start] + arr[end] < m){
                 start++;
-                end--;
-                sum = arr[start] + arr[end];
-
-            }else if( sum < m){
-
-                sum -= arr[start];
-                start++;
-                sum += arr[start];
-
             }else{
-                sum -= arr[end];
+                if(arr[start] + arr[end] == m){
+                    answer++;
+                }
                 end--;
-                sum += arr[end];
-
             }
+
+
         }
 
-        System.out.println(count);
-
-
-
+        System.out.println(answer);
 
     }
 }
