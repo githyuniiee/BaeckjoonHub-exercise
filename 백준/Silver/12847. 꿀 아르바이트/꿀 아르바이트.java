@@ -1,8 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
+
+    static int checkArr[];
+    static int myArr[];
+    static int checkSecret;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,7 +18,7 @@ public class Main {
         long day[] = new long[n];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
+        for(int i=0; i<n; i++){
             day[i] = Long.parseLong(st.nextToken());
         }
 
@@ -26,12 +31,14 @@ public class Main {
         long max = sum;
 
         //슬라이딩 윈도우
-        for (int i = m; i < n; i++) {
+        for(int i=m; i<n; i++){
             sum += day[i];
-            sum -= day[i - m];
+            sum -= day[i-m];
 
             max = Math.max(sum, max);
         }
         System.out.println(max);
+
     }
 }
+
