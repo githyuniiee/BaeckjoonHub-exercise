@@ -1,57 +1,62 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 
+    static int n;
+    static int[] arr;
 
-    static int[] lectures;
-    static int N;
-
-    public static int lowerBound(int start, int end, int target) {
-
-        while(start < end){
-            int mid = (start + end) / 2;
-            if(getCount(mid) > target){
-                start = mid + 1;
-            }else {
-                end = mid;
-            }
-        }
-        return start;
-    }
-
-    public static int getCount(int mid) {
-        int count = 1;
-        int remain = mid;
-        for (int i = 0; i < N; i++) {
-            if(remain < lectures[i]){
-                remain = mid;
-                count++;
-            }
-            remain -= lectures[i];
-        }
-
-        return count;
-
-    }
-
-
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        int[] arr = new int[n];
+
+        int start = 0;
+        int end = 0;
+        int result = 0;
+
         st = new StringTokenizer(br.readLine());
-        lectures = new int[N];
-        int sum = 0;
-        int maxBlueray = 0;
-        for (int i = 0; i < N; i++) {
-            lectures[i] = Integer.parseInt(st.nextToken());
-            sum += lectures[i];
-            maxBlueray = Math.max(maxBlueray, lectures[i]);
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+            if (start < arr[i]) {
+                start = arr[i];
+            }
+            end += arr[i];
         }
-        System.out.println(lowerBound(maxBlueray, sum, M));
+
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            int count = 0;
+            int sum = 0;
+
+            for (int i = 0; i < n; i++) {
+
+                if(sum + arr[i] > mid){
+                    count++;
+                    sum = 0;
+                }
+                sum += arr[i];
+            }
+
+            count++;
+
+            if(count <= m){
+                result = mid;
+                end = mid - 1;
+            }else{
+                start = mid + 1;
+            }
+        }
+
+        System.out.println(result);
+
+
+
+
     }
+
 
 }
