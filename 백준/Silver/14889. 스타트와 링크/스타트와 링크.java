@@ -37,36 +37,33 @@ public class Main {
             int linkTeam = 0;
 
             for (int i = 0; i < n-1; i++) {
-                for (int j = i; j < n; j++) {
-
-                    if(visited[i] && visited[j]){
-                        startTeam += map[i][j];
-                        startTeam += map[j][i];
+                for (int j = i + 1; j < n; j++) {
+                    if (visited[i] && visited[j]) {
+                        startTeam += map[i][j] + map[j][i];
                     }
 
                     if (!visited[i] && !visited[j]) {
-                        linkTeam += map[i][j];
-                        linkTeam += map[j][i];
+                        linkTeam += map[i][j] + map[j][i];
                     }
                 }
             }
 
             int answer = Math.abs(startTeam - linkTeam);
-            if(answer == 0){
-                min = answer;
-                System.out.println(min);
+            if (answer == 0) {
+                System.out.println(answer);
                 System.exit(0);
             }
 
-            min = Math.min(min, answer);
+            min = Math.min(answer, min);
             return;
-
         }
 
+
+
         for (int i = idx; i < n; i++) {
-            if(!visited[i]){
+            if (!visited[i]) {
                 visited[i] = true;
-                dfs(i+1, depth+1);
+                dfs(i + 1, depth+1);
                 visited[i] = false;
             }
         }
