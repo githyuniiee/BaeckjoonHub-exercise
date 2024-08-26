@@ -1,65 +1,54 @@
 import java.util.*;
-
 class Solution {
     static ArrayList<Integer>[] graph;
-    static boolean[] visited;
-    static int min = Integer.MAX_VALUE;
+    static int min;
     
     public int solution(int n, int[][] wires) {
-        
-        //그래프 연결
         graph = new ArrayList[n+1];
+        min = Integer.MAX_VALUE;
         
-        for(int i=0; i<=n; i++){
+        for(int i=1; i<=n; i++){
             graph[i] = new ArrayList<>();
         }
         
         for(int i=0; i<wires.length; i++){
-            int a = wires[i][0];
-            int b = wires[i][1];
-            
-            graph[a].add(b);
-            graph[b].add(a);
+            int v1 = wires[i][0];
+            int v2 = wires[i][1];
+            graph[v1].add(v2);
+            graph[v2].add(v1);
         }
         
         for(int i=0; i<wires.length; i++){
+            int v1 = wires[i][0];
+            int v2 = wires[i][1];
             
-            int a = wires[i][0];
-            int b = wires[i][1];
+            boolean[] visited = new boolean[n+1];
             
-            graph[a].remove(Integer.valueOf(b));
-            graph[b].remove(Integer.valueOf(a));
+            graph[v1].remove(Integer.valueOf(v2));
+            graph[v2].remove(Integer.valueOf(v1));
             
-            visited = new boolean[n+1];
+            int cnt = dfs(1,visited);
             
-           
-            int cnt = dfs(1);
-            int diff = Math.abs(cnt - (n-cnt));
-            
+            int diff = Math.abs(cnt - (n - cnt));
             min = Math.min(min, diff);
             
-            graph[a].add(b);
-            graph[b].add(a);
+            graph[v1].add(v2);
+            graph[v2].add(v1);
         }
         
-
         return min;
     }
     
-    
-    //연결 끊는 dfs
-    static int dfs(int start){
-        visited[start] = true;
+    static int dfs(int v, boolean[] visited){
+        visited[v] = true;
         int cnt = 1;
         
-        for(int a : graph[start]){
-            if(!visited[a]){
-                
-                cnt += dfs(a);
+        for(int next : graph[v]){
+            if(!visited[next]){
+                cnt += dfs(next, visited);
             }
         }
         
         return cnt;
-        
     }
 }
