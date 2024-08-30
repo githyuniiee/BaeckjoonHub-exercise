@@ -1,24 +1,34 @@
+import java.util.*;
+
 class Solution {
     
+    static int[][] dungeon;
     static boolean[] visited;
-    static int count = 0;
+    static int len;
+    static int answer;
     
-    public int solution(int k, int[][] dungeons) {
-        visited = new boolean[dungeons.length];
-        dfs(0,k,dungeons);
-        return count;
+    static void dfs(int remainingFatigue, int depth) {
+        answer = Math.max(answer, depth); // 최대 깊이(탐험 수)를 갱신
+
+        // 모든 던전을 순회하며 방문하지 않은 던전을 탐험
+        for (int i = 0; i < len; i++) {
+            if (!visited[i] && dungeon[i][0] <= remainingFatigue) {
+                visited[i] = true;
+                dfs(remainingFatigue - dungeon[i][1], depth + 1);
+                visited[i] = false; // 탐험 후 다시 초기화
+            }
+        }
     }
     
-    private void dfs(int depth, int fatigue, int[][] dungeons){
-        for(int i=0; i<dungeons.length; i++){
-            if(visited[i] || dungeons[i][0] > fatigue){
-                continue;
-            }
-            
-            visited[i] = true;
-            dfs(depth+1, fatigue-dungeons[i][1], dungeons);
-            visited[i] = false;
-        }
-        count = Math.max(count, depth);
+    public int solution(int k, int[][] dungeons) {
+        dungeon = dungeons;
+        len = dungeons.length;
+        visited = new boolean[len];
+        answer = 0;
+
+        // DFS 탐색 시작
+        dfs(k, 0);
+
+        return answer;
     }
 }
