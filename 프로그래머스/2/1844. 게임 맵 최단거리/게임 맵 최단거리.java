@@ -1,49 +1,49 @@
 import java.util.*;
 
 class Solution {
-    static int[] dx = new int[] {-1,1,0,0};
-    static int[] dy = new int[] {0,0,-1,1};
     
-    public int solution(int[][] maps) {
-      
-        int answer = 0;
-        int[][] visited = new int[maps.length][maps[0].length];
-        
-        bfs(maps, visited);
-        answer = visited[maps.length-1][maps[0].length-1];
-        
-        if(answer == 0){
-            answer = -1;
-        }
-        return answer;
-  
-    }
+    static int[] dx = new int[]{-1,0,0,1};
+    static int[] dy = new int[]{0,-1,1,0};
     
-    public void bfs(int[][] maps, int[][] visited){
-        int x = 0;
-        int y = 0;
-        visited[x][y] = 1;
-        
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{x, y});
+    static void bfs(int[][] maps, int y, int x){
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(y,x));
+    
         
         while(!q.isEmpty()){
-            int[] current = q.remove();
-            int cX = current[0];
-            int cY = current[1];
+            Node node = q.poll();
             
             for(int i=0; i<4; i++){
-                int nX = cX + dx[i];
-                int nY = cY + dy[i];
+                int next_x = node.x + dx[i];
+                int next_y = node.y + dy[i];
                 
-                if(nX < 0|| nY < 0 || nX > maps.length-1 || nY > maps[0].length -1 ) continue;
-                
-                if(visited[nX][nY] ==0 && maps[nX][nY] == 1){
-                    visited[nX][nY] = visited[cX][cY] + 1;
-                    q.add(new int[]{nX, nY});
+                if((0<= next_y && next_y <maps.length)
+                  && (0<= next_x && next_x<maps[0].length)
+                  && maps[next_y][next_x] == 1){
+                    q.add(new Node(next_y, next_x));
+                    maps[next_y][next_x] = maps[node.y][node.x] + 1;
                 }
             }
         }
     }
+    public int solution(int[][] maps) {
+        
+        
+        bfs(maps,0,0);
+        
+        if(maps[maps.length - 1][maps[0].length -1] > 1 ){
+            return maps[maps.length - 1][maps[0].length -1];
+        }
+        return -1;
+    }
+}
 
+class Node {
+    int x;
+    int y;
+    
+    public Node(int y, int x){
+        this.x = x;
+        this.y = y;
+    }
 }
