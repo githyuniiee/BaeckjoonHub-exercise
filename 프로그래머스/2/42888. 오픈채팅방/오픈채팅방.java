@@ -2,11 +2,13 @@ import java.util.*;
 
 class Solution {
     public String[] solution(String[] record) {
-        Map<String, String> map = new HashMap<>();
+        
+        HashMap<String, String> map = new HashMap<>();
         List<String> list = new ArrayList<>();
         
-        for(String entry : record){
-            String[] str = entry.split(" ");
+        for(String s : record){
+            String[] str = s.split(" ");
+            
             if(str[0].equals("Enter")){
                 map.put(str[1], str[2]);
             }else if(str[0].equals("Change")){
@@ -14,8 +16,9 @@ class Solution {
             }
         }
         
-        for(String entry : record){
-            String[] str = entry.split(" ");
+        for(String s : record){
+            String[] str = s.split(" ");
+            
             if(str[0].equals("Enter")){
                 list.add(map.get(str[1]) + "님이 들어왔습니다.");
             }else if(str[0].equals("Leave")){
@@ -23,8 +26,7 @@ class Solution {
             }
         }
         
-        
-        
-        return list.toArray(new String[0]);
+        String[] answer = list.toArray(new String[0]);
+        return answer;
     }
 }
