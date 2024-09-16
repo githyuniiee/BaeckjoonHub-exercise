@@ -2,51 +2,63 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] queue1, int[] queue2) {
-       
+        int answer = 0;
         Queue<Integer> q1 = new LinkedList<>();
         Queue<Integer> q2 = new LinkedList<>();
-        long sum_q1 = 0;
-        long sum_q2 = 0;
         
-        for(Integer a : queue1){
-            q1.add(a);
-            sum_q1+= a;
+        long sum1 = 0;
+        long sum2 = 0;
+        
+        
+        //q1 사이즈
+        for(int i : queue1){
+            q1.add(i);
+            sum1 += i;
         }
         
-        for(Integer a : queue2){
-            q2.add(a);
-            sum_q2+= a;
+        //q2 사이즈
+        for(int i : queue2){
+            q2.add(i);
+            sum2 += i;
         }
         
-        int iter = (q1.size() + q2.size()) * 2;
-        int count = 0;
+        long sum = sum1 + sum2;
         
-        if((sum_q1 + sum_q2) % 2 != 0){
-            return -1;
-        }
+        if(sum % 2 !=0) return -1;
         
-        while(sum_q1 != sum_q2){
-            if(q1.isEmpty() || q2.isEmpty()){
-                return -1;
+        //원하는 값
+        long goal = sum/2;
+        int maxOperation = (q1.size() + q2.size()) * 2 ;
+        int operations = 0;
+        
+        while(sum1 != goal && operations <= maxOperation){
+            
+            if(sum1 > goal){
+                int n = q1.poll();
+                q2.add(n);
+                sum1 -= n;
+                sum2 += n;
+                answer++;
+                operations++;
             }
-            if(sum_q1 > sum_q2){
-                int first = q1.remove();
-                q2.add(first);
-                sum_q1 -= first;
-                sum_q2 += first;
-            }else if(sum_q1 < sum_q2){
-                int first = q2.remove();
-                q1.add(first);
-                sum_q2 -= first;
-                sum_q1 += first;
+            
+            if(sum2 > goal){
+                int n = q2.poll();
+                q1.add(n);
+                sum1 += n;
+                sum2 -= n;
+                answer++;
+                operations++;
             }
-            if(count > iter){
-                return -1;
-            }
-            count++;
+            
+            
+            
         }
         
-        return count;
-
+        
+        
+        
+        
+        return (sum1 == goal) ? answer : -1;
     }
 }
