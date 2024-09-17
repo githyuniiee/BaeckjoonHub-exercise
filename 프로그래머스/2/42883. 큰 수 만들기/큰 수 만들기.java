@@ -2,29 +2,25 @@ import java.util.*;
 
 class Solution {
     public String solution(String number, int k) {
-        String answer = "";
-        StringBuilder answerBuilder = new StringBuilder();
         
-        char[] arr = number.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        char[] ch = number.toCharArray();
         
-        int len = arr.length - k;
+        int len = number.length() - k;
         
         int start = 0;
-        
         for(int i=0; i<len; i++){
-            char max = '0';
-            for(int j = start; j<= i+k; j++){
-                if(arr[j] > max){
-                    max = arr[j];
-                    start = j+1;
+            char c = '0';
+            for(int j=start; j<= i+k; j++){
+                if(ch[j] > c){
+                    c = ch[j];
+                    start = j + 1;
                 }
             }
-            answerBuilder.append(Character.toString(max));
+            
+            sb.append(c);
         }
         
-        answer = answerBuilder.toString();
-        return answer;
-        
-  
+        return sb.toString();
     }
 }
