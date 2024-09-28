@@ -1,31 +1,35 @@
 import java.util.*;
 
 class Solution {
-    public int  solution(int k, int[] tangerine) {
+    public int solution(int k, int[] tangerine) {
+        int answer = 0;
+        int total = tangerine.length;
         
         Map<Integer, Integer> map = new HashMap<>();
-        int sum = 0;
-        int cnt = 0; //최솟값 카운트
         
         for(int i=0; i<tangerine.length; i++){
+            
             map.put(tangerine[i], map.getOrDefault(tangerine[i], 0) + 1);
         }
         
-        ArrayList<Integer> valueList = new ArrayList<>(map.values());
-        Collections.sort(valueList, Collections.reverseOrder());
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int a : map.values()){
+            list.add(a);
+        }
         
-        for(int v : valueList){
-            if(sum + v >= k){
-                cnt++;
+        Collections.sort(list, Collections.reverseOrder());
+        int sum = 0;
+        
+        for(int a : list){
+            if(sum >= k){
                 break;
-            }else{
-                sum += v;
-                cnt++;
             }
+            
+            sum += a;
+            answer++;
         }
         
         
-        
-        return cnt;
+        return answer;
     }
 }
