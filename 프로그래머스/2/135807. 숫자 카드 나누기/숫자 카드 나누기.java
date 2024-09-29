@@ -1,40 +1,57 @@
 class Solution {
-    public boolean notDivisible(int[] arr, int num) {
-        for (int n : arr) {
-            if (n % num == 0) {
-                return false;
-            }
+    private int gcd(int a, int b) {
+        if (b == 0) {
+            return a; // b가 0이면 a가 최대공약수
         }
-        return true;
-    }
-    
-    public int gcd(int a, int b) {
-        if (b == 0) return a; // b가 0일 경우 a가 최대공약수
         return gcd(b, a % b); // 유클리드 알고리즘
     }
-    
+
     public int solution(int[] arrayA, int[] arrayB) {
-        // 0. 입력 및 초기화
         int answer = 0;
-        int gcdA = arrayA[0];
-        int gcdB = arrayB[0];
-        
-        // 1. 각 배열의 최대공약수 구하기
+
+        // arrayA와 arrayB의 최대공약수를 구합니다.
+        int g1 = arrayA[0];
+        int g2 = arrayB[0];
+
+        // arrayA의 최대공약수 계산
         for (int i = 1; i < arrayA.length; i++) {
-            gcdA = gcd(gcdA, arrayA[i]);
-            gcdB = gcd(gcdB, arrayB[i]);
+            g1 = gcd(g1, arrayA[i]);
         }
-        
-        // 2. 서로의 배열을 나눌 수 없는지 확인
-        if (notDivisible(arrayB, gcdA)) {
-            answer = Math.max(answer, gcdA);
+
+        // arrayB의 최대공약수 계산
+        for (int i = 1; i < arrayB.length; i++) {
+            g2 = gcd(g2, arrayB[i]);
         }
-        
-        if (notDivisible(arrayA, gcdB)) {
-            answer = Math.max(answer, gcdB);
+
+        // arrayB가 g1으로 나눠지는지 확인
+        if (g1 != 0) {
+            for (int i = 0; i < arrayB.length; i++) {
+                if (arrayB[i] % g1 == 0) {
+                    g1 = 0; // g1이 arrayB의 요소를 나눌 수 있으면 0으로 설정
+                    break;
+                }
+            }
         }
-        
-        // 3. 최댓값 반환 (서로 나누지 않으면 0을 반환할 수도 있음)
-        return answer == 0 ? 0 : answer; // answer가 0일 경우 0 반환
+
+        // arrayA가 g2로 나눠지는지 확인
+        if (g2 != 0) {
+            for (int i = 0; i < arrayA.length; i++) {
+                if (arrayA[i] % g2 == 0) {
+                    g2 = 0; // g2가 arrayA의 요소를 나눌 수 있으면 0으로 설정
+                    break;
+                }
+            }
+        }
+
+        // g1과 g2 중 큰 값을 반환, 둘 다 0이면 0을 반환
+        if (g1 != 0 && g2 != 0) {
+            return Math.max(g1, g2);
+        } else if (g1 != 0) {
+            return g1;
+        } else if (g2 != 0) {
+            return g2;
+        }
+
+        return 0;
     }
 }
