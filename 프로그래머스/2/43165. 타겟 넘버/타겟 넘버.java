@@ -1,24 +1,29 @@
 class Solution {
-   
+    
     static int answer = 0;
     
     public int solution(int[] numbers, int target) {
-        
-        bfs(numbers, 0, target, 0);
-        
-        return answer;
-       
+
+        return dfs(numbers, target, 0, 0);
     }
     
-    static void bfs(int[] numbers, int depth, int target, int sum){
-        
+    static int dfs(int[] numbers, int target, int now, int depth){
+  
         if(depth == numbers.length){
-            if(sum == target){
+            if(target == now){
                 answer++;
             }
-        }else{
-            bfs(numbers, depth+1, target, sum + numbers[depth]);
-            bfs(numbers, depth+1, target, sum - numbers[depth]);
+            return answer;
         }
+        
+      
+        dfs(numbers, target, now + numbers[depth], depth + 1);
+        dfs(numbers, target, now - numbers[depth], depth + 1);
+        
+        
+        return answer;
+        
+        
+        
     }
 }
