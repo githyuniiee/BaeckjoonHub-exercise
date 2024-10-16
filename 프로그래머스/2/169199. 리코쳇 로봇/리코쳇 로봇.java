@@ -1,79 +1,88 @@
 import java.util.*;
+
 class Solution {
-    
-    static boolean[][] visited;
-    static int dy[] = new int[]{0,1,-1,0};
-    static int dx[] = new int[]{-1,0,0,1};
-    static final char START = 'R', GOAL = 'G', DISABLE = 'D';
-    
-    static class Node{
-        int y;
-        int x;
-        int depth;
-        
-        public Node(int y, int x, int depth){
-            this.y = y;
+    private final int[] dx = {-1, 1, 0, 0};
+    private final int[] dy = {0, 0, -1, 1};
+
+    private final char ROBOT = 'R', DISABLE = 'D', GOAL = 'G';
+
+    private int n, m;
+
+    private class Moving {
+        int x, y, depth;
+
+        public Moving(int x, int y, int depth) {
             this.x = x;
+            this.y = y;
             this.depth = depth;
         }
     }
-    
-    
+
     public int solution(String[] board) {
         int answer = 0;
-        Node robot = null;
-        Node goal = null;
-        visited = new boolean[board.length][board[0].length()];
-        
-        for(int i=0; i<board.length; i++){
-            for(int j=0; j<board[0].length(); j++){
-                if(board[i].charAt(j) == START){
-                    robot = new Node(i,j,0);
-                }else if(board[i].charAt(j) == GOAL){
-                    goal = new Node(i,j,0);
+
+        n = board.length;
+        m = board[0].length();
+
+        Moving robot = null;
+        Moving goal = null;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                char ch = board[i].charAt(j);
+
+                if (ch == ROBOT) {
+                    robot = new Moving(i, j, 0);
+                } else if (ch == GOAL) {
+                    goal = new Moving(i, j, 0);
                 }
             }
         }
-        
+
         answer = bfs(board, robot, goal);
-        
+
         return answer;
     }
-    
-    static int bfs(String[] board, Node robot, Node goal){
-        Queue<Node> q = new LinkedList<>();
-        q.add(robot);
-        visited[robot.y][robot.x] = true;
-        
-        while(!q.isEmpty()){
-            Node now = q.poll();
-            
-            if(now.y == goal.y && now.x == goal.x){
-                return now.depth;
+
+    private int bfs(String[] board, Moving robot, Moving goal) {
+        Queue<Moving> qu = new LinkedList<>();
+        qu.add(robot);
+        boolean[][] visited = new boolean[n][m];
+        visited[robot.x][robot.y] = true;
+
+        while (!qu.isEmpty()) {
+            Moving cn = qu.poll();
+
+            if (cn.x == goal.x && cn.y == goal.y) {
+                return cn.depth;
             }
-            
-            for(int i=0; i<4; i++){
-                int next_y = now.y;
-                int next_x = now.x;
-                
-                while(0<=next_y && next_y <board.length && 
-                  0<=next_x && next_x <board[0].length() &&
-                  board[next_y].charAt(next_x) != DISABLE){
-                    next_y += dy[i];
-                    next_x += dx[i];
+
+            for (int i = 0; i < 4; i++) {
+                int nx = cn.x;
+                int ny = cn.y;
+
+                // 범위를 벗어나거나 장애물을 만날 때 까지 반복
+                while (inRange(nx, ny) && board[nx].charAt(ny) != DISABLE) {
+                    nx += dx[i];
+                    ny += dy[i];
                 }
-                
-                next_y -= dy[i];
-                next_x -= dx[i];
-                
-                if(visited[next_y][next_x] || (now.y == next_y && now.x == next_x)) continue;
-                
-                visited[next_y][next_x] = true;
-                q.add(new Node(next_y,next_x, now.depth +1));
-                
+
+                // 범위를 벗어나거나 장애물 만나기 '직전'의 상태
+                nx -= dx[i];
+                ny -= dy[i];
+
+                // 방문을 하거나 같은 위치일 경우 스킵
+                if (visited[nx][ny]) continue;
+
+                visited[nx][ny] = true;
+                qu.add(new Moving(nx, ny, cn.depth + 1));
             }
         }
+
         return -1;
-        
+    }
+
+    private boolean inRange(int x, int y) {
+        return x >= 0 && y >= 0 && x < n && y < m;
     }
 }
