@@ -3,32 +3,33 @@ import java.util.*;
 class Solution {
     public int solution(int[] topping) {
         int answer = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
         
-        Map<Integer, Integer> map_1 = new HashMap<>(); //형
-        Map<Integer, Integer> map_2 = new HashMap<>(); //동생
-        for(int e : topping){
-            map_2.put(e, map_2.getOrDefault(e,0) + 1);
+        for(int i=0; i<topping.length; i++){
+            map.put(topping[i], map.getOrDefault(topping[i], 0) + 1);
         }
         
-        for(int e : topping){
-            map_1.put(e, map_1.getOrDefault(e,0) + 1);
+        for(int i=0; i<topping.length; i++){
             
-            if(map_2.get(e) - 1 == 0){
-                map_2.remove(e);
-            }else {
-                map_2.put(e, map_2.get(e) - 1);
+            set.add(topping[i]);
+            
+            map.put(topping[i], map.get(topping[i]) - 1);
+            
+            if(map.get(topping[i]) == 0){
+                map.remove(topping[i]);
             }
             
-            if(map_1.size() == map_2.size()){
-                
+            if(set.size() == map.size()){
                 answer++;
             }
+            
+            
         }
         
+        
+        
+        
         return answer;
-        
-        
-        
-      
     }
 }
