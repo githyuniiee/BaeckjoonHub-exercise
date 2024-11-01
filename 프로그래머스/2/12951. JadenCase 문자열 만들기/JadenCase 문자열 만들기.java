@@ -1,28 +1,24 @@
+import java.util.*;
+
 class Solution {
     public String solution(String s) {
         String answer = "";
-        String[] arr = s.split(" ");
         
-        for(int i=0; i<arr.length; i++){
-            String now = arr[i];
+        String[] str = s.split(" ", -1);
+        
+        for(int i = 0; i < str.length; i++) {
+            if (str[i].length() > 0) {
+                String s1 = str[i].substring(0, 1).toUpperCase();
+                String s2 = str[i].substring(1).toLowerCase();
+                answer += s1 + s2;
+            }
             
-            if(arr[i].length() == 0){
-                answer += " ";
-            }else{
-                answer += now.substring(0,1).toUpperCase();
-                answer += now.substring(1, now.length()).toLowerCase();
+            // 마지막 단어가 아닐 경우에만 공백 추가
+            if (i < str.length - 1) {
                 answer += " ";
             }
         }
         
-        if(s.substring(s.length()-1, s.length()).equals(" ")){
-            return answer;
-        }
-        
-        // 맨 마지막 " " 제거 후 반환
-        return answer.substring(0, answer.length()-1);
-        
-        
-        
+        return answer;
     }
 }
