@@ -3,27 +3,21 @@ class Solution {
     static int answer = 0;
     
     public int solution(int[] numbers, int target) {
-
-        return dfs(numbers, target, 0, 0);
+        dfs(numbers, 0, 0, target);
+        return answer;
     }
     
-    static int dfs(int[] numbers, int target, int now, int depth){
-  
+    static void dfs(int[] numbers, int sum, int depth, int target){
         if(depth == numbers.length){
-            if(target == now){
+            if(target == sum){
                 answer++;
             }
-            return answer;
+            return;
         }
         
-      
-        dfs(numbers, target, now + numbers[depth], depth + 1);
-        dfs(numbers, target, now - numbers[depth], depth + 1);
-        
-        
-        return answer;
-        
-        
+       
+        dfs(numbers, sum + numbers[depth], depth + 1, target);
+        dfs(numbers, sum - numbers[depth], depth + 1, target);
         
     }
 }
