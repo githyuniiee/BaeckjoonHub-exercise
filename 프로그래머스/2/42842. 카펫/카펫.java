@@ -1,22 +1,18 @@
 class Solution {
     public int[] solution(int brown, int yellow) {
         int[] answer = new int[2];
-        int carpet = brown + yellow;
         
-        for(int i=3; i<=carpet; i++){
-            
-            int col = i;
-            int row = carpet / i;
-            
-            if(row >= col){
-                if((row-2) * (col-2) == yellow){
-                    answer[0] = row;
-                    answer[1] = col;
-                    break;
+        int sum = brown + yellow;
+        
+        for(int i=1; i<= sum; i++){ //가로의 길이
+            if(sum % i == 0){
+                int divideNum = sum / i; // 세로의 길이
+                if((i-2) * (divideNum -2) == yellow){
+                    answer[0] = divideNum;
+                    answer[1] = i;
+                    return answer;
                 }
             }
-            
-            
         }
         
         
