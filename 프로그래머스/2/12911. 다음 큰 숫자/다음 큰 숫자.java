@@ -1,17 +1,18 @@
 class Solution {
     public int solution(int n) {
-        int answer = 0;
-        int nowCount = Integer.bitCount(n);
+        
+        int count = Integer.bitCount(n);
+        int answer = n + 1;
         
         while(true){
-            n++;
-            int nextCount = Integer.bitCount(n);
-            
-            if(nowCount == nextCount){
+            if(count == Integer.bitCount(answer)){
                 break;
             }
+            
+            answer++;
         }
         
-        return n;
+        
+        return answer;
     }
 }
