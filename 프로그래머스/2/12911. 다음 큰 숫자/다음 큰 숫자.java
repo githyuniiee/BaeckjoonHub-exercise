@@ -1,19 +1,18 @@
 class Solution {
     public int solution(int n) {
-        int answer = 0;
-        int c1 = Integer.bitCount(n);
+        
+        int b1 = Integer.bitCount(n);
         
         while(true){
             n++;
-            int c2 = Integer.bitCount(n);
             
-            if(c1 == c2){
-                answer = n;
+            int b2 = Integer.bitCount(n);
+            
+            if(b1 == b2){
                 break;
             }
         }
         
-        
-        return answer;
+        return n;
     }
 }
