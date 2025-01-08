@@ -1,68 +1,62 @@
 import java.util.*;
 
 class Solution {
-    public  int solution(String str1, String str2) {
-        str1 = str1.toUpperCase();
-        str2 = str2.toUpperCase();
+    public int solution(String str1, String str2) {
+        int answer = 0;
         
+        str1 = str1.toLowerCase();
+        str2 = str2.toLowerCase();
         
-        ArrayList<String> list1 = new ArrayList<>();
-        ArrayList<String> list2 = new ArrayList<>();
+        Map<String, Integer> map1 = new HashMap<>();
+        Map<String, Integer> map2 = new HashMap<>();
         
-        ArrayList<String> union = new ArrayList<>();
-        ArrayList<String> intersection = new ArrayList<>();
-        
-        
-        //str1 다중 집합 만들기
-        for(int i=0; i<str1.length()-1; i++){
-            char a = str1.charAt(i);
-            char b = str1.charAt(i+1);
-            
-            if(Character.isLetter(a) && Character.isLetter(b)){
-                String str = Character.toString(a) + Character.toString(b);
-                list1.add(str);
+        // str1에서 2글자씩 잘라서 map1에 추가
+        for (int i = 0; i < str1.length() - 1; i++) {
+            String str = str1.substring(i, i + 2);
+            if ('a' <= str.charAt(0) && str.charAt(0) <= 'z' &&
+                'a' <= str.charAt(1) && str.charAt(1) <= 'z') {
+                map1.put(str, map1.getOrDefault(str, 0) + 1);
             }
         }
         
-        //str2 다중 집합 만들기
-        for(int i=0; i<str2.length()-1; i++){
-            char a = str2.charAt(i);
-            char b = str2.charAt(i+1);
-            
-            if(Character.isLetter(a) && Character.isLetter(b)){
-                String str = Character.toString(a) + Character.toString(b);
-                list2.add(str);
+        // str2에서 2글자씩 잘라서 map2에 추가
+        for (int i = 0; i < str2.length() - 1; i++) {
+            String str = str2.substring(i, i + 2);
+            if ('a' <= str.charAt(0) && str.charAt(0) <= 'z' &&
+                'a' <= str.charAt(1) && str.charAt(1) <= 'z') {
+                map2.put(str, map2.getOrDefault(str, 0) + 1);
             }
         }
         
-        Collections.sort(list1);
-        Collections.sort(list2);
-        
-        for(String s : list1){
-            if(list2.remove(s)){
-                intersection.add(s);
+        // 교집합과 합집합 크기 계산
+        int intersectionCount = 0; // 교집합
+        int unionCount = 0; // 합집합
+
+        // map1의 모든 항목을 순회하며 계산
+        for (String key : map1.keySet()) {
+            if (map2.containsKey(key)) {
+                intersectionCount += Math.min(map1.get(key), map2.get(key)); // 교집합 크기
+                unionCount += Math.max(map1.get(key), map2.get(key)); // 합집합 크기
+            } else {
+                unionCount += map1.get(key); // map2에 없는 항목은 합집합에만 포함
             }
-            union.add(s);
+        }
+
+        // map2에만 존재하는 항목을 합집합에 추가
+        for (String key : map2.keySet()) {
+            if (!map1.containsKey(key)) {
+                unionCount += map2.get(key); // map1에 없는 항목은 합집합에만 포함
+            }
         }
         
-        for(String s : list2){
-            union.add(s);
+        // 자카드 유사도 계산
+        if (intersectionCount == 0 && unionCount == 0) {
+            return 65536; // 교집합과 합집합이 모두 없을 경우
         }
         
-        double a = intersection.size();
-        double b = union.size();
+        double ans = (double) intersectionCount / unionCount;
+        answer = (int) (ans * 65536); // 비율을 65536으로 곱하여 결과 반환
         
-        double jakard = 0;
-        
-        if(union.size() == 0){
-            jakard = 1;
-        }else{
-            jakard = (double)intersection.size() / (double)union.size();
-        }
-        
-        return (int) (jakard*65536);
-        
-        
-        
+        return answer;
     }
 }
