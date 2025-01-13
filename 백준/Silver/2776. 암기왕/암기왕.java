@@ -24,12 +24,12 @@ public class Main {
             for (int j = 0; j < second; j++) {
                 int num = Integer.parseInt(stk.nextToken());
                 if (set.contains(num)) {
-                    sb.append(1).append("\n"); // 결과를 StringBuilder에 저장
+                    sb.append(1).append("\n");
                 } else {
                     sb.append(0).append("\n");
                 }
             }
         }
-        System.out.print(sb); // 한 번에 출력
+        System.out.print(sb); 
     }
 }
