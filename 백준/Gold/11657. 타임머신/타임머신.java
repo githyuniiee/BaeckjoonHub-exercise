@@ -1,112 +1,81 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n,m;
-    static ArrayList<ArrayList<City>> a;
-    static long[] dist;
-    static final int INF = 987654321;
+    static class Edge {
+        int start,end,weight;
+        Edge(int start, int end, int weight){
+            this.start = start;
+            this.end = end;
+            this.weight = weight;
+        }
+    }
+
+
 
     public static void main(String[] args) throws Exception {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
 
-        n = Integer.parseInt(st.nextToken()); // 도시의 개수
-        m = Integer.parseInt(st.nextToken()); // 버스 노선의 개수
-
-        a = new ArrayList<>();
-        dist = new long[n+1];
-
-        for(int i=0; i<=n; i++){
-            a.add(new ArrayList<>());
-            dist[i] = INF;
-        }
-
+        //그래프 구현
+        Edge[] edgeArr = new Edge[m + 1];
         for(int i=0; i<m; i++){
             st = new StringTokenizer(br.readLine());
-            int A = Integer.parseInt(st.nextToken());
-            int B = Integer.parseInt(st.nextToken());
-            int C = Integer.parseInt(st.nextToken());
+            edgeArr[i] = new Edge(Integer.parseInt(st.nextToken()),
+                    Integer.parseInt(st.nextToken()),
+                    Integer.parseInt(st.nextToken()));
+        }
 
-            a.get(A).add(new City(B,C));
+        //최단거리배열 초기화
+        long[] dist = new long[n+1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[1] = 0;
+
+        //최단거리 갱신
+        for(int i=0; i< n - 1;i++){ //엣지 리스트 n-1 순회
+            for (int j = 0; j < m; j++) {
+                Edge edge = edgeArr[j];
+
+                if(dist[edge.start] != Integer.MAX_VALUE
+                && dist[edge.end] > dist[edge.start] + edge.weight){
+                    dist[edge.end] = dist[edge.start] + edge.weight;
+                }
+            }
+        }
+
+        //음수사이클 유무 확인
+        for (int j = 0; j < m; j++) {
+            Edge edge = edgeArr[j];
+
+            if (dist[edge.start] != Integer.MAX_VALUE
+                    && dist[edge.end] > dist[edge.start] + edge.weight) {
+                System.out.println(-1);
+                return;
+            }
         }
 
         StringBuilder sb = new StringBuilder();
-        if(bellmanFord()){
-            sb.append("-1\n");
-        }else{
-            for(int i=2; i<=n; i++){
-                if(dist[i] == INF){
-                    sb.append("-1\n");
-                }else{
-                    sb.append(dist[i] + "\n");
-                }
-            }
+        for (int i = 2; i <= n; i++) {
+            sb.append(dist[i] != Integer.MAX_VALUE ? dist[i] : -1).append("\n");
+            // 갱신되지 않은 노드 = 시작점 1에서 해당 노드로 가는 경로가 없음
         }
+        System.out.println(sb);
 
-        bw.write(sb.toString());
-        bw.flush();
-        bw.close();
-        br.close();
-    }
 
-    public static boolean bellmanFord(){
-        dist[1] = 0;
-        boolean update = false;
 
-        for(int i=1; i<n; i++) {
-            update = false;
 
-            for (int j = 1; j <= n; j++) {
-                for (City city : a.get(j)) {
-                    if (dist[j] == INF) {
-                        break;
-                    }
 
-                    if (dist[city.end] > dist[j] + city.weight) {
-                        dist[city.end] = dist[j] + city.weight;
-                        update = true;
-                    }
-                }
-            }
 
-            if (!update)
-                break;
-        }
 
-        if (update) {
-            for (int i = 1; i <= n; i++) {
-                for (City city : a.get(i)) {
-                    if (dist[i] == INF) {
-                        break;
-                    }
 
-                    if (dist[city.end] > dist[i] + city.weight) {
-                        return true;
-                    }
-                }
-            }
-        }
 
-        return false;
     }
 
 }
 
-class City {
-    int end;
-    int weight;
-
-    City(int end, int weight){
-        this.end = end;
-        this.weight = weight;
-    }
-}
