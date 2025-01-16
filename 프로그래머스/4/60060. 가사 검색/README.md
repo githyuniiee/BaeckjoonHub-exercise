@@ -1,6 +1,6 @@
 # [level 4] 가사 검색 - 60060 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/60060) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/60060?language=java) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 01월 16일 11:31:20
+2025년 01월 16일 11:32:04
 
 ### 문제 설명
 
