@@ -11,6 +11,7 @@ public class Main {
 
     static ArrayList<Integer>[] list;
     static boolean[] visited;
+    static int answer;
 
 
 
@@ -37,33 +38,26 @@ public class Main {
             list[end].add(start);
         }
 
-        int answer = bfs(1);
+        dfs(1);
 
         System.out.println(answer);
 
     }
 
-    static int bfs(int start){
-        Queue<Integer> q = new LinkedList<>();
-        q.add(start);
-        visited[start] = true;
-        int cnt = 0;
+    static int dfs(int start){
+       visited[start] = true;
 
-        while (!q.isEmpty()) {
-            int now = q.poll();
+        for (int i = 0; i < list[start].size(); i++) {
+            int next = list[start].get(i);
 
-            for (int i = 0; i < list[now].size(); i++) {
-                int next = list[now].get(i);
 
-                if(!visited[next]){
-                    cnt++;
-                    q.add(next);
-                    visited[next] = true;
-                }
+            if(!visited[next]){
+                answer++;
+                dfs(next);
             }
         }
 
-        return cnt;
+        return answer;
     }
 
 
