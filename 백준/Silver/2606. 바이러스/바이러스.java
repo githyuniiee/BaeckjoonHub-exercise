@@ -1,46 +1,72 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
 
 public class Main {
 
-   static int ComputerNum;
-   static int NetworkNum;
-   static boolean[][] graph;
-   static boolean[] visit;
-   static int count;
+    static ArrayList<Integer>[] list;
+    static boolean[] visited;
 
-    static void dfs(int v) {
-        count ++;
-        visit[v] = true;
-        for (int i = 1; i <= ComputerNum; i++) {
-            if (!visit[i] && graph[v][i]) {
-                dfs(i);
-            }
+
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
+
+        list = new ArrayList[n+1];
+        visited = new boolean[n + 1];
+
+        for (int i = 0; i <= n; i++) {
+            list[i] = new ArrayList<>();
         }
+
+        for (int i = 0; i < m; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+
+            list[start].add(end);
+            list[end].add(start);
+        }
+
+        int answer = bfs(1);
+
+        System.out.println(answer);
+
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        ComputerNum = Integer.parseInt(br.readLine());
-        NetworkNum = Integer.parseInt(br.readLine());
-        graph = new boolean[ComputerNum+1][ComputerNum+1];
-        visit = new boolean[ComputerNum+1];
-        for (int i = 0; i < NetworkNum; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int a1 = Integer.parseInt(st.nextToken());
-            int a2 = Integer.parseInt(st.nextToken());
-            graph[a1][a2] = true;
-            graph[a2][a1] = true;
-        }
-        count = 0;
-        dfs(1);
-        System.out.println(count-1);
+    static int bfs(int start){
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        visited[start] = true;
+        int cnt = 0;
 
+        while (!q.isEmpty()) {
+            int now = q.poll();
+
+            for (int i = 0; i < list[now].size(); i++) {
+                int next = list[now].get(i);
+
+                if(!visited[next]){
+                    cnt++;
+                    q.add(next);
+                    visited[next] = true;
+                }
+            }
         }
+
+        return cnt;
+    }
+
+
 }
-
-
 
 
