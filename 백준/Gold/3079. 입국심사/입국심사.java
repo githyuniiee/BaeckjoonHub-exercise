@@ -20,7 +20,7 @@ public class Main {
 
         Arrays.sort(arr);
 
-        long start = 0;
+        long start = arr[0];
         long end = arr[n-1] * m;
         long answer = Long.MAX_VALUE;
 
@@ -30,7 +30,7 @@ public class Main {
 
             for (int i = 0; i < n; i++) {
                 sum += (mid / arr[i]);
-                
+
                 if(sum >= m){
                     break;
                 }
