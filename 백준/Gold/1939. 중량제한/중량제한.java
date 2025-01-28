@@ -8,13 +8,15 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+
     static int n,m;
     static ArrayList<ArrayList<Node>> list;
     static boolean[] visited;
+    static int s, e;
     static int low = Integer.MAX_VALUE;
     static int high = Integer.MIN_VALUE;
-    static int start,end;
     static int answer = 0;
+
 
     static class Node{
         int v;
@@ -34,31 +36,32 @@ public class Main {
 
         list = new ArrayList<>();
 
-        for (int i = 0; i <= n; i++) {
+        for(int i=0; i<=n; i++){
             list.add(new ArrayList<>());
         }
 
-        for (int i = 0; i < m; i++) {
+        for(int i=0; i<m; i++){
             st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
             int weight = Integer.parseInt(st.nextToken());
 
-            list.get(s).add(new Node(e, weight));
-            list.get(e).add(new Node(s, weight));
+            list.get(start).add(new Node(end, weight));
+            list.get(end).add(new Node(start, weight));
 
             low = Math.min(low, weight);
-            high = Math.max(high, weight);
+            high = Math.max(weight, high);
         }
 
+
         st = new StringTokenizer(br.readLine());
-        start = Integer.parseInt(st.nextToken());
-        end = Integer.parseInt(st.nextToken());
+        s = Integer.parseInt(st.nextToken());
+        e = Integer.parseInt(st.nextToken());
 
         while(low <= high){
-
             int mid = (low + high) / 2;
-            visited = new boolean[n + 1];
+
+            visited = new boolean[n+1];
 
             if(bfs(mid)){
                 answer = Math.max(answer, mid);
@@ -73,24 +76,29 @@ public class Main {
 
     static boolean bfs(int weight){
         Queue<Node> q = new LinkedList<>();
-        q.add(new Node(start, 0));
-        visited[start] = true;
+        visited[s] = true;
+        q.add(new Node(s, 0));
 
-        while (!q.isEmpty()) {
+        while(!q.isEmpty()){
             Node node = q.poll();
 
-            if(node.v == end){
+            if(node.v == e){
                 return true;
             }
 
-            for(Node nd : list.get(node.v)) {
-                if (!visited[nd.v] && nd.w >= weight) {
+            for(Node nd : list.get(node.v)){
+
+                if(!visited[nd.v] && nd.w >= weight){
                     visited[nd.v] = true;
                     q.add(nd);
                 }
+
             }
         }
+
         return false;
+
+    
     }
 
 }
