@@ -7,8 +7,7 @@ public class Main {
 
     static int n, s, m;
     static int[] change;
-    static int answer = -1;
-    static boolean[][] visited;
+    static boolean[][] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,30 +17,40 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
 
         change = new int[n];
-        visited = new boolean[n + 1][m + 1];
+        dp = new boolean[n+1][m+1];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             change[i] = Integer.parseInt(st.nextToken());
         }
 
-        dfs(s, 0);
+        dp[0][s] = true;
+
+        for(int i=0; i<n; i++){
+            for(int v = 0; v<=m; v++){
+                if(dp[i][v]){
+                    if (v + change[i] <= m) {  
+                        dp[i + 1][v + change[i]] = true;
+                    }
+                    if (v - change[i] >= 0) {  
+                        dp[i + 1][v - change[i]] = true;
+                    }
+                }
+            }
+        }
+
+        int answer = -1;
+        for(int v = m; v>=0; v--){
+            if(dp[n][v]){
+                answer = v;
+                break;
+            }
+        }
+
         System.out.println(answer);
+
+        
     }
 
-    static void dfs(int now, int depth) {
-        if (now < 0 || now > m || visited[depth][now]) {  // 중복 탐색 방지
-            return;
-        }
-
-        visited[depth][now] = true;
-
-        if (depth == n) {  
-            answer = Math.max(answer, now);  
-            return;
-        }
-
-        dfs(now + change[depth], depth + 1);
-        dfs(now - change[depth], depth + 1);
-    }
+   
 }
