@@ -7,25 +7,24 @@ import java.util.StringTokenizer;
 public class Main {
 
     static int m,n;
+
     static int[][] arr;
-    static boolean[][] visited;
     static int[][] dp;
-    static int count = 0;
     static int[] dy = new int[]{-1,0,0,1};
     static int[] dx = new int[]{0,1,-1,0};
+    static int count = 0;
 
 
     public static void main(String[] args)throws IOException{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         m = Integer.parseInt(st.nextToken());
         n = Integer.parseInt(st.nextToken());
 
         arr = new int[m][n];
         dp = new int[m][n];
-        visited = new boolean[m][n];
+
 
         for(int i=0; i<m; i++){
             st = new StringTokenizer(br.readLine());
@@ -35,10 +34,8 @@ public class Main {
             }
         }
 
-
         System.out.println(dfs(0,0));
 
-        
     }
 
     static int dfs(int y, int x){
@@ -53,19 +50,16 @@ public class Main {
 
         dp[y][x] = 0;
 
+
         for(int i=0; i<4; i++){
-            int ny = y + dy[i];
-            int nx = x + dx[i];
+            int ny = dy[i] + y;
+            int nx = dx[i] + x;
 
-            if(0 <= ny && ny < m && 0 <= nx && nx < n
-            && arr[y][x] > arr[ny][nx]){
-                dp[y][x] += dfs(ny, nx);
+            if(0<=ny && ny < m && 0<= nx && nx < n && arr[y][x] > arr[ny][nx]){
+                dp[y][x] += dfs(ny,nx);
             }
-
         }
 
         return dp[y][x];
-
-
     }
 }
