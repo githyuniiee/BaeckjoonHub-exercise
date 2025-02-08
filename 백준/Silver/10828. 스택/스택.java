@@ -1,55 +1,57 @@
+import java.io.*;
+import java.util.*;
+ 
+public class Main {
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Stack;
-import java.util.StringTokenizer;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
+		Stack<Integer> stack = new Stack<>();
+		StringBuilder sb = new StringBuilder();
 
-class Main {
-    public static void main(String[] args) throws IOException {
+		for(int i=0; i<n; i++){
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+			String[] str = br.readLine().split(" ");
 
-        int n = Integer.parseInt(st.nextToken());
-        Stack<Integer> stack = new Stack<>();
+			switch(str[0]){
+				case "push":
+				stack.push(Integer.parseInt(str[1]));
+				break;
 
-        for (int i = 0; i < n; i++) {
-            String str = br.readLine();
-            int length = str.length();
-            switch (str){
-                case "pop":
-                    if(!stack.isEmpty()){
-                        System.out.println(stack.pop());
-                    }else{
-                        System.out.println(-1);
-                    }
-                    break;
-                case "size":
-                    System.out.println(stack.size());
-                    break;
-                case "empty":
-                    if(stack.empty()){
-                        System.out.println("1");
-                    }else{
-                        System.out.println("0");
-                    }
-                    break;
-                case "top" :
-                    if (!stack.empty()) {
-                        System.out.println(stack.peek());
-                    }else{
-                        System.out.println("-1");
-                    }
-                    break;
-                default:
-                    String str1 = str.substring(5, str.length());
-                    int a = Integer.parseInt(str1);
-                    stack.push(a);
-                    break;
-            }
-        }
+				case "pop":
+				if(stack.isEmpty()){
+					sb.append(-1 + "\n");
+				}else{
+					sb.append(stack.pop() + "\n");
+				}
+				break;
 
+				case "size":
+				sb.append(stack.size() + "\n");
+				break;
 
-    }
+				case "empty":
+				if(stack.isEmpty()){
+					sb.append(1 + "\n");
+				}else{
+					sb.append(0 + "\n");
+				}
+				break;
+
+				case "top":
+				if(stack.isEmpty()){
+					sb.append(-1 + "\n");
+				}else{
+					sb.append(stack.peek() + "\n");
+				}
+				break;
+
+			}
+		}
+
+		System.out.println(sb);
+		
+	}
+	
+	
 }
