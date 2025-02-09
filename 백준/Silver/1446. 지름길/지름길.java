@@ -44,22 +44,32 @@ public class Main {
 
        
 		Collections.sort(streets, ((o1,o2) -> o1.s - o2.s));
-        dijkstra();
+        dijkstra(0);
 
         System.out.println(dp[d]);
     }
 
-    static void dijkstra() {
-        for (int i = 0; i <= d; i++) {
-            if (i > 0) {
-                dp[i] = Math.min(dp[i], dp[i - 1] + 1);
-            }
+    static void dijkstra(int start) {
+        PriorityQueue<Street> pq = new PriorityQueue<>((o1,o2) -> o1.v - o2.v);
 
-            for (Street str : streets) {
-                if (str.s == i && dp[str.e] > dp[i] + str.v) {
-                    dp[str.e] = dp[i] + str.v;
+        pq.add(new Street(0, 0, 0));
+
+        dp[start] = 0;
+
+        while(!pq.isEmpty()){
+            Street street = pq.poll();
+            int now = street.e;
+
+            for(Street str : streets){
+                if(str.s >= now){
+                    if(dp[str.e] > dp[now] + str.v + (str.s - now)){
+                        dp[str.e] = dp[now] + str.v + (str.s - now);
+                        pq.add(new Street(now, str.e , dp[str.e]));
+                    }
                 }
             }
+            dp[d] = Math.min(dp[now] + d - now, dp[d]);
+
         }
     }
 }
