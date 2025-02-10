@@ -1,81 +1,92 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+
+
+
 public class Main {
+
+    static int v,e, s;
+    static ArrayList<ArrayList<Node>> list;
+    static int INF = Integer.MAX_VALUE;
+    static int[] dp;
+
+    static class Node {
+        int num;
+        int val;
+    
+        Node(int num, int val){
+            this.num = num;
+            this.val = val;
+        }
+    }
+    
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int v = Integer.parseInt(st.nextToken());
-        int e = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(br.readLine());
 
-        ArrayList<Edge>[] list = new ArrayList[v+1];
-        for (int i = 1; i <= v; i++) {
-            list[i] = new ArrayList<Edge>();
-        }
-        boolean[] visited = new boolean[v + 1];
-        int[] distance = new int[v + 1];
-        for(int i=1; i<=v; i++){
-            distance[i] = Integer.MAX_VALUE;
+        v = Integer.parseInt(st.nextToken());
+        e = Integer.parseInt(st.nextToken());
+
+        s = Integer.parseInt(br.readLine());
+
+        list = new ArrayList<>();
+        dp = new int[v+1];
+
+        for(int i=0; i<=v; i++){
+            list.add(new ArrayList<>());
+            dp[i] = INF; 
         }
 
-        for (int i = 0; i < e; i++) {
+        for(int i=0; i<e; i++){
             st = new StringTokenizer(br.readLine());
-            int u = Integer.parseInt(st.nextToken());
-            int V = Integer.parseInt(st.nextToken());
-            int w = Integer.parseInt(st.nextToken());
-            list[u].add(new Edge(V, w));
+
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            int val = Integer.parseInt(st.nextToken());
+
+            list.get(start).add(new Node(end, val));
         }
 
-        PriorityQueue<Edge> q = new PriorityQueue<>();
-        q.add(new Edge(k, 0));
-        distance[k] = 0;
+        
 
-        while (!q.isEmpty()) {
-            Edge current = q.poll();
-            int c_v = current.vertex;
+        dij(s);
 
-            if(visited[c_v]) continue;
-            visited[c_v] = true;
-
-            for (int i = 0; i < list[c_v].size(); i++) {
-                Edge tmp = list[c_v].get(i);
-                int next = tmp.vertex;
-                int value = tmp.value;
-
-                if(distance[next] > distance[c_v] + value){
-                    distance[next] = distance[c_v] + value;
-                    q.add(new Edge(next, distance[next]));
-                }
-            }
-        }
-
-        for (int i = 1; i <= v; i++) {
-            if(visited[i]){
-                System.out.println(distance[i]);
-            }else{
+        for(int i=1; i<=v; i++){
+            if(dp[i] == INF){
                 System.out.println("INF");
+            }else{
+
+                System.out.println(dp[i]);
             }
         }
 
     }
-}
 
-class Edge implements Comparable<Edge>{
-    int vertex;
-    int value;
+    static void dij(int s){
+        PriorityQueue<Node> pq = new PriorityQueue<>((o1,o2) -> (o1.val - o2.val));
+        pq.add(new Node(s, 0));
+        dp[s] = 0;
 
-    Edge(int vertex, int value) {
-        this.vertex = vertex;
-        this.value = value;
+        while(!pq.isEmpty()){
+            Node now = pq.poll();
+
+            for(Node next : list.get(now.num)){
+
+                if(dp[next.num] > dp[now.num] + next.val){
+                    dp[next.num] = dp[now.num] + next.val;
+                    pq.add(new Node(next.num, dp[next.num]));
+                }
+
+            }
+        }
+
     }
 
-    public int compareTo(Edge e){
-        if(this.value > e.value) return 1;
-        else return -1;
-    }
+
+    
+
 }
