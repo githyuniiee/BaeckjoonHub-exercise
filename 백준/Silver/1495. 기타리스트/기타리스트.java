@@ -16,7 +16,6 @@ public class Main {
         int[] arr = new int[n];
         boolean[][] list = new boolean[n + 1][m + 1]; 
         list[0][s] = true; 
-        int answer = -1;
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
@@ -24,7 +23,6 @@ public class Main {
         }
 
         for (int i = 0; i < n; i++) {
-            boolean pass = false;
             for (int j = 0; j <= m; j++) {
                 if (list[i][j]) {  
                     int first = arr[i] + j;
@@ -32,21 +30,19 @@ public class Main {
 
                     if (0 <= first && first <= m) {
                         list[i + 1][first] = true;
-                        pass = true;
                     }
 
                     if (0 <= second && second <= m) {
                         list[i + 1][second] = true;
-                        pass = true;
                     }
                 }
             }
 
 
-            if (!pass) break;
         }
 
 
+        int answer = -1;
         for (int i = m; i >= 0; i--) {
             if (list[n][i]) {
                 answer = i; 
