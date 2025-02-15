@@ -6,58 +6,57 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static int l,c;
-    static String[] alpha;
+    static int L,C;
+    static String[] arr;
     static StringBuilder sb = new StringBuilder();
+
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        l = Integer.parseInt(st.nextToken());
-        c = Integer.parseInt(st.nextToken());
+        L = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
 
-        alpha = br.readLine().split(" ");
-     
-        Arrays.sort(alpha);
+        arr = br.readLine().split(" ");
+
+        Arrays.sort(arr);
 
 
-        dfs(0,0,0,"");
-          
+        dfs(0,0,0,""); //now, 자음, 모음, 문자
 
         System.out.println(sb.toString().trim());
 
-        
+
     }
 
-    static void dfs(int count1, int count2, int now, String str){
+    static void dfs(int now, int cnt1, int cnt2, String str){
 
-
-        if(str.length() == l ){
-
-            if(count1 >=1 && count2 >= 2){
+        if(str.length() == L){
+            if(cnt1 >= 1 && cnt2 >= 2){
                 sb.append(str + "\n");
             }
             return;
         }
 
-        if(now >= c) return;
-
-
-
-        if(alpha[now].equals("a") || alpha[now].equals("e") ||
-        alpha[now].equals("i") || alpha[now].equals("o") || 
-        alpha[now].equals("u")){
-
-            dfs(count1 + 1, count2, now + 1, str + alpha[now]);
-            
-        }else{
-            dfs(count1, count2 + 1, now + 1, str + alpha[now]);
+        if(now >= C){
+            return;
         }
 
-   
-        //현재 알파벳 선택 X
-        dfs(count1, count2, now + 1, str);
+        int next = now + 1;
+
+
+        if(arr[now].equals("a")|| arr[now].equals("e")|| arr[now].equals("i")
+        || arr[now].equals("o") || arr[now].equals("u")){
+            dfs(next, cnt1 + 1, cnt2, str + arr[now]);
+        }else{
+            dfs(next, cnt1, cnt2+1, str + arr[now]);
+        }
+
+        dfs(next, cnt1, cnt2, str);
 
 
     }
+
+    
 }
