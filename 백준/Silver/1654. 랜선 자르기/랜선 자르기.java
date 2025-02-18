@@ -1,51 +1,51 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static int[] arr;
 
     public static void main(String[] args) throws Exception {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int K = Integer.parseInt(st.nextToken()); // 랜선의 개수
-        int N = Integer.parseInt(st.nextToken()); // 필요한 랜선의 개수
-        arr = new int[K];
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
 
-        int max = 0;
-        for (int i = 0; i < K; i++) {
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
-            if (arr[i] > max) {
-                max = arr[i];
-            }
         }
 
-        long start = 1;
-        long end = max;
-        long result = 0;
+        Arrays.sort(arr);
 
-        while (start <= end) {
-            long mid = (start + end) / 2;
-            int num = getCount(mid);
+        long right = arr[n-1];
+        long left = 1;
+        long count, half;
 
-            if (num >= N) {
-                result = Math.max(result, mid);
-                start = mid + 1;
-            } else {
-                end = mid - 1;
+        while(left <= right){
+            count = 0;
+            half = (left + right) / 2;
+
+            for(int i=0; i<n; i++){
+                count += arr[i] / half;
             }
+
+            if(count < m) right = half - 1;
+            else left = half + 1;
         }
 
-        System.out.println(result);
+        System.out.println(right);
+
+
+
+
+
+
     }
 
-    public static int getCount(long length) {
-        int count = 0;
-        for (int a : arr) {
-            count += a / length;
-        }
-        return count;
-    }
 }
+
