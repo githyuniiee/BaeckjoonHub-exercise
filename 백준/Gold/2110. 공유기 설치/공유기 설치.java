@@ -1,56 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         int n = Integer.parseInt(st.nextToken());
         int c = Integer.parseInt(st.nextToken());
-        long[] arr = new long[n];
+        
+        int[] arr = new int[n];
 
-        for (int i = 0; i < n; i++) {
-            arr[i] = Long.parseLong(br.readLine());
+        for(int i=0; i<n; i++){
+            arr[i] = Integer.parseInt(br.readLine());
         }
 
         Arrays.sort(arr);
 
-        long low = 1;
-        long high = arr[n-1] - arr[0] + 1;
-        long answer = 0;
+        long start = 0;
+        long end = arr[n-1] - arr[0];
+        long ans = 0;
 
+        while(start <= end){
 
-        while(low<= high){
-            long mid = (low + high) / 2;
-            int count = 1;
-            long nowPoint = arr[0];
+            long cnt = 1;
+            int now = arr[0];
 
+            long mid = (start + end) / 2;
 
-            for (int i = 1; i < n; i++) {
-                if (arr[i] - nowPoint >= mid) {
-                    count++;
-                    nowPoint = arr[i];
+            for(int i=1; i<n; i++){
+
+                if(cnt >= c) break;
+
+                if(arr[i] >= now + mid){
+                    now = arr[i];
+                    cnt++;
                 }
             }
 
-            if(count < c){
-
-                high = mid-1;
+            if(cnt < c){
+                end = mid -1;
             }else{
-                
-                answer = Math.max(answer, mid);
-                
-                low = mid+1;
+                start = mid + 1;
+                ans = mid;
             }
-
-
         }
 
-        System.out.println(answer);
+        System.out.println(ans);
+
+       
+
 
     }
+
 }
