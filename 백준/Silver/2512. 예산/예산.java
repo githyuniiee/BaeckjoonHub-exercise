@@ -1,42 +1,39 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-
 
 public class Main {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+        
         int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
+        long[] arr = new long[n];
 
-        String[] str = br.readLine().split(" ");
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-
-        for (int i = 0; i < str.length; i++) {
-            arr[i] = Integer.parseInt(str[i]);
+        for(int i=0; i<n; i++){
+            arr[i] = Long.parseLong(st.nextToken());
         }
 
-        long m = Long.parseLong(br.readLine());
-
+        int m = Integer.parseInt(br.readLine());
         Arrays.sort(arr);
 
-        long start = 1;
+        long start = 0;
         long end = arr[arr.length - 1];
-        long answer = 0;
-        long max = 0;
+        long ans = 0;
+        
 
-        while (start <= end) {
-
+        while(start <= end){
             long mid = (start + end) / 2;
             long sum = 0;
 
-            for (int i = 0; i < n; i++) {
-                if(arr[i] >= mid){
+            
+
+            for(int i=0; i<n; i++){
+
+                if(arr[i] > mid){
                     sum += mid;
                 }else{
                     sum += arr[i];
@@ -44,16 +41,20 @@ public class Main {
             }
 
             if(sum <= m){
-                if(max < sum){
-                    max = sum;
-                    answer = mid;
-                }
+                ans = mid;
                 start = mid + 1;
             }else{
                 end = mid - 1;
             }
+
+          
         }
 
-        System.out.println(answer);
+        System.out.println(ans);
+
+
+
+
     }
+
 }
