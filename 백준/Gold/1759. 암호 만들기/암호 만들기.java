@@ -1,62 +1,46 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static int L,C;
+    static int l, c;
     static String[] arr;
     static StringBuilder sb = new StringBuilder();
 
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        L = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
+        l = Integer.parseInt(st.nextToken());
+        c = Integer.parseInt(st.nextToken());
 
         arr = br.readLine().split(" ");
+        Arrays.sort(arr);  
 
-        Arrays.sort(arr);
-
-
-        dfs(0,0,0,""); //now, 자음, 모음, 문자
-
-        System.out.println(sb.toString().trim());
-
-
+        dfs(0, 0, 0, ""); 
+        System.out.println(sb);
     }
 
-    static void dfs(int now, int cnt1, int cnt2, String str){
-
-        if(str.length() == L){
-            if(cnt1 >= 1 && cnt2 >= 2){
-                sb.append(str + "\n");
+    static void dfs(int now, int num1, int num2, String str) {
+        if (str.length() == l) {
+            if (num1 >= 1 && num2 >= 2) {
+                sb.append(str).append("\n");
             }
-            return;
+            return; 
         }
 
-        if(now >= C){
-            return;
+        //조합문제 visited 배열 사용 x 현재 이후로부터 탐색
+        for (int i = now; i < c; i++) {  
+            if (isVowel(arr[i])) {
+                dfs(i + 1, num1 + 1, num2, str + arr[i]);
+            } else {
+                dfs(i + 1, num1, num2 + 1, str + arr[i]);
+            }
         }
-
-        int next = now + 1;
-
-
-        if(arr[now].equals("a")|| arr[now].equals("e")|| arr[now].equals("i")
-        || arr[now].equals("o") || arr[now].equals("u")){
-            dfs(next, cnt1 + 1, cnt2, str + arr[now]);
-        }else{
-            dfs(next, cnt1, cnt2+1, str + arr[now]);
-        }
-
-        dfs(next, cnt1, cnt2, str);
-
-
     }
 
-    
+    static boolean isVowel(String ch) {
+        return "aeiou".contains(ch);
+    }
 }
