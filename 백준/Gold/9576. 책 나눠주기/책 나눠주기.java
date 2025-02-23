@@ -1,65 +1,74 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
+
     
-    static int n, m;
-    static ArrayList<Integer>[] books; // 각 책을 빌릴 수 있는 학생 리스트
-    static int[] matched; // 각 책에 매칭된 학생
-    static boolean[] visited; // DFS 방문 여부
-    
-    public static void main(String[] args) throws IOException {
+    static int n,m;
+    static ArrayList<Integer>[] list;
+    static boolean[] check;
+    static int[] matched;
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int t = Integer.parseInt(br.readLine());
-        
-        for (int tc = 0; tc < t; tc++) {
+
+        for(int i=0; i<t; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
-            n = Integer.parseInt(st.nextToken()); // 책의 개수
-            m = Integer.parseInt(st.nextToken()); // 학생의 수
-            
-            books = new ArrayList[n + 1];
-            for (int i = 1; i <= n; i++) {
-                books[i] = new ArrayList<>();
+            n = Integer.parseInt(st.nextToken());
+            m = Integer.parseInt(st.nextToken());
+
+            list = new ArrayList[m+1];
+            check = new boolean[n+1];
+            matched = new int[n+1];
+
+            for(int j=1; j<=m; j++){
+                list[j] =  new ArrayList<>();
             }
 
-            for (int i = 0; i < m; i++) {
+            for(int j=1; j<=m; j++){
                 st = new StringTokenizer(br.readLine());
                 int a = Integer.parseInt(st.nextToken());
                 int b = Integer.parseInt(st.nextToken());
 
-                for (int j = a; j <= b; j++) {
-                    books[j].add(i + 1); // 학생 i+1이 빌릴 수 있는 책 j 등록
+                for(int k=a; k<=b; k++){
+                    list[j].add(k);
                 }
             }
 
-            matched = new int[m + 1]; // 각 학생이 매칭된 책
-            int ans = 0;
-            
-            for (int i = 1; i <= n; i++) {
-                visited = new boolean[m + 1];
-                if (dfs(i)) {
-                    ans++;
+            int count = 0;
+            for(int j=1; j<=m; j++){
+                Arrays.fill(check, false);
+                if(dfs(j)){
+
+                    count++;
                 }
             }
-            
-            System.out.println(ans);
+
+            System.out.println(count);            
+
         }
+        
     }
-    
-    static boolean dfs(int book) {
-        for (int student : books[book]) {
-            if (visited[student]) continue;
-            visited[student] = true;
-            
-            // 학생이 아직 책을 배정받지 않았거나, 현재 배정된 책을 다른 학생에게 넘길 수 있는 경우
-            if (matched[student] == 0 || dfs(matched[student])) {
-                matched[student] = book;
-                return true;
+
+    static boolean dfs(int person){
+        for(int book : list[person]){
+            if(!check[book]){
+                check[book] = true;
+
+                if(matched[book] == 0 || dfs(matched[book])){
+                    matched[book] = person;
+                    return true;
+                }
             }
         }
+
         return false;
     }
+
+
+
 }
