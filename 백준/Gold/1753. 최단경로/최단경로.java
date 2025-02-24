@@ -1,92 +1,88 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-
-
-
 public class Main {
 
-    static int v,e, s;
-    static ArrayList<ArrayList<Node>> list;
-    static int INF = Integer.MAX_VALUE;
-    static int[] dp;
 
-    static class Node {
-        int num;
-        int val;
-    
-        Node(int num, int val){
-            this.num = num;
-            this.val = val;
+    static int V,E;
+    static List<ArrayList<Edge>> list;
+    static int[]dist;
+    static int INF = Integer.MAX_VALUE;
+
+    static class Edge{
+        int n;
+        int v;
+
+        Edge(int n, int v){
+            this.n = n;
+            this.v = v;
         }
     }
-    
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
-        v = Integer.parseInt(st.nextToken());
-        e = Integer.parseInt(st.nextToken());
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
 
-        s = Integer.parseInt(br.readLine());
-
+        int start = Integer.parseInt(br.readLine());
         list = new ArrayList<>();
-        dp = new int[v+1];
+        dist = new int[V+1];
 
-        for(int i=0; i<=v; i++){
+        Arrays.fill(dist, INF);
+
+        for(int i=0; i<=V; i++){
             list.add(new ArrayList<>());
-            dp[i] = INF; 
         }
 
-        for(int i=0; i<e; i++){
+
+        for(int i=0; i<E; i++){
             st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+            int value = Integer.parseInt(st.nextToken());
 
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            int val = Integer.parseInt(st.nextToken());
-
-            list.get(start).add(new Node(end, val));
+            list.get(s).add(new Edge(e, value));
         }
 
-        
 
-        dij(s);
+        dijk(start);
 
-        for(int i=1; i<=v; i++){
-            if(dp[i] == INF){
-                System.out.println("INF");
+        for(int i=1; i<=V; i++){
+
+            if(dist[i] == INF){
+                sb.append("INF" + "\n");
             }else{
-
-                System.out.println(dp[i]);
+                sb.append(dist[i] + "\n");
             }
         }
 
+        System.out.println(sb.toString().trim());
+
     }
 
-    static void dij(int s){
-        PriorityQueue<Node> pq = new PriorityQueue<>((o1,o2) -> (o1.val - o2.val));
-        pq.add(new Node(s, 0));
-        dp[s] = 0;
+    static void dijk(int start){
+        dist[start] = 0;
+        PriorityQueue<Edge> pq = new PriorityQueue<>((o1,o2) -> o1.v - o2.v);
+        pq.add(new Edge(start, 0));
 
         while(!pq.isEmpty()){
-            Node now = pq.poll();
+            Edge now = pq.poll();
 
-            for(Node next : list.get(now.num)){
+            for(Edge nxt : list.get(now.n)){
 
-                if(dp[next.num] > dp[now.num] + next.val){
-                    dp[next.num] = dp[now.num] + next.val;
-                    pq.add(new Node(next.num, dp[next.num]));
+                if(dist[nxt.n] > dist[now.n] + nxt.v){
+                    dist[nxt.n] = dist[now.n] + nxt.v;
+                    pq.add(new Edge(nxt.n, dist[nxt.n]));
                 }
-
             }
         }
-
     }
-
-
-    
 
 }
