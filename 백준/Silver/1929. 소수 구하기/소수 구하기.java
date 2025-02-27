@@ -1,35 +1,31 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-        int a = Integer.parseInt(st.nextToken());
-        int b = Integer.parseInt(st.nextToken());
-        int[] arr = new int[b+1];
+        int m = Integer.parseInt(st.nextToken());
+        int n = Integer.parseInt(st.nextToken());
 
-        for (int i = 2; i < arr.length; i++) {
-            arr[i] = i;
-        }
+        boolean[] arr = new boolean[n+1];
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 2; i <= Math.sqrt(b); i++) {
-            for (int j = i + i; j <= b; j += i) {
-                arr[j] = 0;
+        arr[0] = true;
+        arr[1] = true; //소수 X
+
+        for(int i=2; i*i<= n; i++){
+            if(!arr[i]){
+                for(int j=i*i; j<=n; j+= i){
+                    arr[j] = true;
+                }
             }
         }
 
-        for (int i = a; i <= b; i++) {
-            if (arr[i] != 0) {
-                System.out.println(arr[i]);
-            }
-        }
-
-
-
+        for(int i = m; i <= n; i++) {
+			if(!arr[i]) sb.append(i).append("\n");
+		}
+		System.out.println(sb);
     }
 }
