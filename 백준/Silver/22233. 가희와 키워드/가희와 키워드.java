@@ -1,43 +1,41 @@
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
-        HashSet<String> set = new HashSet<>();
+        HashMap<String, Integer> map = new HashMap<>();
 
         for(int i=0; i<n; i++){
-            String str = br.readLine();
-            set.add(str);
+            String keyword = br.readLine();
+            map.put(keyword, map.getOrDefault(keyword, 0) + 1);
         }
-        
-        StringBuilder sb = new StringBuilder();
 
         for(int i=0; i<m; i++){
+            String[] word = br.readLine().split(",");
 
-            String[] keyword = br.readLine().split(",");
+            for(int j=0; j<word.length; j++){
+                if(map.containsKey(word[j])){
+                    map.put(word[j], map.getOrDefault(word[j], 0) - 1);
 
-            for(int k=0; k<keyword.length; k++){
-                if(set.contains(keyword[k])){
-                    set.remove(keyword[k]);
+                    if(map.get(word[j]) == 0) map.remove(word[j]);
                 }
             }
 
-            sb.append(set.size() + "\n");
-
-            
+            sb.append(map.size() + "\n");
         }
 
         System.out.println(sb);
+     
 
     }
-
-   
 }
