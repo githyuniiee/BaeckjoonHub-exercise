@@ -1,36 +1,36 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    static int[][] arr;
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
-        int[][] arr = new int[n+1][n+1];
 
-        for (int i = 0; i <= n; i++) {
-            arr[i][0] = 1;
-            arr[i][1] = 1;
-            arr[i][i] = 1;
+        arr = new int[n+1][k+1];
+
+        int result = getC(n,k);
+
+        System.out.println(result);
+       
+    }
+
+    static int getC(int n, int k){
+
+        if(arr[n][k] != 0) return arr[n][k];
+
+        if(n==k || k == 0){
+            arr[n][k] = 1;
+        }else{
+            arr[n][k] = (getC(n-1, k-1) + getC(n-1, k)) % 10007;
         }
 
-        for (int i = 2; i <= n; i++) {
-            for (int j = 1; j < i; j++) {
-                arr[i][j] = (arr[i - 1][j] + arr[i - 1][j - 1]) % 10007;
-            }
-        }
-
-
-        System.out.println(arr[n][k]);
-
-
-
-
+        return arr[n][k];
     }
 
 }
