@@ -50,11 +50,12 @@ public class Main {
 			pq.add(nation);
 		}
 
-		int idx = 1;
+		int rank = 1;
+		int sameRank = 1;
 
 		Nation now = pq.poll();
 		if(now.num == k){
-			System.out.println(idx);
+			System.out.println(rank);
 			return;
 		}
 
@@ -63,20 +64,16 @@ public class Main {
 			Nation next = pq.poll();
 
 			if(now.g==next.g && now.s == next.s && now.m == next.m){
-				now = next;
-
-				if(k == now.num){
-					System.out.println(idx);
-					return;
-				}
-				continue;
+				sameRank++;
+			}else{
+				//메달 개수가 다르면 갱신
+				rank += sameRank;
+				sameRank = 1;
 			}
-
-			idx++;
 			now = next;
 
 			if(k == now.num){
-				System.out.println(idx);
+				System.out.println(rank);
 				break;
 			}
 		}
