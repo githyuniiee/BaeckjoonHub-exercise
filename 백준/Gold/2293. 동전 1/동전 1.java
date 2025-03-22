@@ -1,29 +1,34 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+		int n = Integer.parseInt(st.nextToken());
+		int k = Integer.parseInt(st.nextToken());
 
-        int[] arr = new int[n+1];
-        int[] dp = new int[k+1];
-        dp[0] = 1;
+		int[] arr = new int[n+1];
 
-        for(int i=1; i<=n; i++){
-            st = new StringTokenizer(br.readLine());
-            arr[i] = Integer.parseInt(st.nextToken());
-            for(int j=arr[i]; j<=k; j++){
-                dp[j] = dp[j] + dp[j-arr[i]];
-            }
-        }
+		for(int i=1; i<=n; i++){
+			arr[i] = Integer.parseInt(br.readLine());
+		}
 
-        System.out.println(dp[k]);
+		int[] dp = new int[k+1];
+
+		dp[0] = 1;
+
+		for(int i=1; i<=n; i++){
+			for(int j=arr[i]; j<=k; j++){
+				dp[j] += dp[j-arr[i]];
+			}
+		}
+
+		System.out.println(dp[k]);
+
+
     }
+
 }
