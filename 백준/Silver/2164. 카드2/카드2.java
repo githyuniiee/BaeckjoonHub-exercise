@@ -1,30 +1,41 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.DelayQueue;
+
 
 public class Main {
 
-    public static void main(String[] args)throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        Queue<Integer> q = new LinkedList<>();
 
-        for(int i=1; i<=n; i++){
-            q.add(i);
-        }
+		Deque<Integer> deque = new LinkedList<>();
 
-        while(q.size()!= 1){
+		for(int i=1; i<=n; i++){
+			deque.add(i);
+		}
+		
+		while(true){
 
-            q.poll();
-            q.add(q.peek());
-            q.poll();
-        }
+			if(deque.size() == 1){
+				break;
+			}
 
-        System.out.println(q.peek());
+			deque.pollFirst();
+
+			if(deque.size() == 1){
+				break;
+			}
+
+			deque.addLast(deque.pollFirst());
+			
+			if(deque.size() == 1){
+				break;
+			}
+		}
+
+		System.out.println(deque.pollFirst());
 
     }
+
 }
