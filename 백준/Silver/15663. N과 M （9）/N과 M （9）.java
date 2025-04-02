@@ -1,68 +1,64 @@
-import java.beans.Visibility;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int n,m;
-    static int[] card;
-    static int[] arr;
-    static boolean[] visited;
-    static Set<String> set;
 
-    public static void main(String[] args) throws IOException {
+	static int n,m;
+	static Set<String> set;
+	static int[] arr;
+	static int[] ans;
+	static boolean[] visited;
+
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
+		arr = new int[n];
+		visited = new boolean[n];
+		ans = new int[m];
+		set = new LinkedHashSet<>();
 
-        card = new int[n];
-        arr = new int[m];
-        visited = new boolean[n];
-        set = new LinkedHashSet<>();
+		st = new StringTokenizer(br.readLine());
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            card[i] = Integer.parseInt(st.nextToken());
-        }
+		for(int i=0; i<n; i++){
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
 
-        Arrays.sort(card);
+		Arrays.sort(arr);
 
-        dfs(0, m);
-
-
-        for (String a : set) {
-            System.out.println(a);
-        }
-
+		dfs(0);
+		
+		for(String s : set){
+			System.out.println(s);
+		}
+		
     }
 
-    static void dfs(int depth, int m){
+	static void dfs(int depth){
+		if(depth == m){
+			String str = "";
+			for(int a : ans){
+				str += a + " ";
+			}
+			set.add(str);
+			return;
+		}
 
-        if(depth == m){
-            String temp = "";
-            for (int num : arr) {
-                temp += num + " ";
-            }
-            set.add(temp);
-            return;
-        }
+		for(int i=0; i<n; i++){
+			if(!visited[i]){
+				visited[i] = true;
+				ans[depth] = arr[i];
+				dfs(depth + 1);
+				visited[i] = false;
+			}
+		}
+	}
 
-        for (int i = 0; i < n; i++) {
-            if(!visited[i]){
-                visited[i] = true;
-                arr[depth] = card[i];
-                dfs(depth+1, m);
-                visited[i] = false;
-            }
-        }
-    }
+	
+
 
 }
