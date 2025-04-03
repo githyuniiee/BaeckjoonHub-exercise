@@ -1,28 +1,29 @@
+import java.util.*;
+
 class Solution {
-    public int answer;
-    public boolean[] visited;
+    
+    static int len;
+    static int answer = 0;
+    static boolean[] visited;
     
     public int solution(int k, int[][] dungeons) {
+        len = dungeons.length;
+        visited = new boolean[len];
         
-        visited = new boolean[dungeons.length];
-        
-        dfs(0, k, dungeons);
+        dfs(k, dungeons, 0);
         
         return answer;
     }
- 
-    public void dfs(int depth, int k, int[][] dungeons){
-        
-        for(int i=0; i<dungeons.length; i++){
-            
-            if(!visited[i] && dungeons[i][0] <= k){
-                visited[i] = true;
-                dfs(depth + 1, k - dungeons[i][1], dungeons);
-                visited[i] = false;
+    
+    static void dfs(int k, int[][] dungeons, int cnt) {
+        answer = Math.max(answer, cnt); // 최대 탐험 횟수 갱신
+
+        for (int i = 0; i < len; i++) {
+            if (!visited[i] && k >= dungeons[i][0]) {
+                visited[i] = true; // 방문 처리
+                dfs(k - dungeons[i][1], dungeons, cnt + 1); // 다음 탐색
+                visited[i] = false; // 백트래킹 (복구)
             }
         }
-        
-        answer = Math.max(answer, depth);
     }
-    
 }
