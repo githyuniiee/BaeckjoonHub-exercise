@@ -2,57 +2,58 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int d = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
-        int c = Integer.parseInt(st.nextToken());
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int[] arr = new int[n];
 
-        for(int i=0; i<n; i++){
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-        
-        Map<Integer, Integer> sushiMap = new HashMap<>();
-        int maxCount = 0;
-        int currentCount = 0;
+		int n = Integer.parseInt(st.nextToken());
+		int d = Integer.parseInt(st.nextToken());
+		int k = Integer.parseInt(st.nextToken());
+		int c = Integer.parseInt(st.nextToken());
 
-        for(int i=0; i<k; i++){
-            sushiMap.put(arr[i], sushiMap.getOrDefault(arr[i], 0) + 1);
-        }
+		int[] arr = new int[n];
 
-        currentCount = sushiMap.size();
-        if(!sushiMap.containsKey(c)){
-            currentCount++;
-        }
-        maxCount = currentCount;
+		for(int i=0; i<n; i++){
+			arr[i] = Integer.parseInt(br.readLine());
+		}
 
-        for(int i=0; i<n; i++){
 
-            int left = arr[i];
-            sushiMap.put(left, sushiMap.get(left) - 1);
-            if(sushiMap.get(left) == 0){
-                sushiMap.remove(left);
-            }
+		Map<Integer, Integer> map = new HashMap<>();
 
-            int right = arr[(i+k) % n];
-            sushiMap.put(right, sushiMap.getOrDefault(right, 0) + 1);
+		for(int i=0; i<k; i++){
+			map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+		}
 
-            //초밥 개수 갱신
-            currentCount = sushiMap.size();
-            if(!sushiMap.containsKey(c)){
-                currentCount++;
-            }
+		map.put(c, map.getOrDefault(c, 0) + 1); //쿠폰 초밥 추가
+		int ans = map.size();
 
-            maxCount = Math.max(maxCount, currentCount);
+		
+		for (int i=1; i<n; i++) {
+			//맨 처음 지우고
+			int remove = arr[(i-1) % n];
+			map.put(remove, map.get(remove) - 1);
 
-        }
+			if(map.get(remove) == 0){
+				map.remove(remove);
+			}
 
-        System.out.println(maxCount);
+			//하나 추가
+			int add = arr[(i+k-1) %n];
+			map.put(add, map.getOrDefault(add, 0) + 1);
 
-   
+			ans = Math.max(ans, map.size());
+
+			
+		}
+		System.out.println(ans);
+
+
+
+	
+		
     }
+
 }
