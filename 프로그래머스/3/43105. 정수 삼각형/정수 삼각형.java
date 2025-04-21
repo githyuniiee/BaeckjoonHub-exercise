@@ -1,31 +1,38 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[][] triangle) {
-        int n = triangle.length;
-
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < triangle[i].length; j++) {
+        int answer = 0;
+        
+        
+        for(int i=1; i<triangle.length; i++){
+            for(int j=0; j<triangle[i].length; j++){
                 
-                // 왼쪽 끝 요소
-                if (j == 0) {
-                    triangle[i][j] += triangle[i - 1][j];
+                //case 1 : 가장 왼쪽
+                if(j == 0){
+                    triangle[i][0] += triangle[i-1][0];
+                    continue;
                 }
-                // 오른쪽 끝 요소
-                else if (j == i) {
-                    triangle[i][j] += triangle[i - 1][j - 1];
+                
+                
+                
+                //case 2 : 가장 우측
+                if(j == triangle[i].length - 1){
+                    triangle[i][j] += triangle[i-1][triangle[i-1].length -1];
+                    continue;
                 }
-                // 중간 요소
-                else {
-                    triangle[i][j] += Math.max(triangle[i - 1][j - 1], triangle[i - 1][j]);
-                }
+                
+                
+                //case 3 : 가운데
+                triangle[i][j] += Math.max(triangle[i-1][j-1], triangle[i-1][j]);
+                
             }
         }
-
-        // 마지막 행에서 최댓값 찾기
-        int answer = 0;
-        for (int num : triangle[n - 1]) {
-            answer = Math.max(answer, num);
+        
+        for(int a : triangle[triangle.length - 1]){
+            answer = Math.max(answer, a);
         }
-
+        
         return answer;
     }
 }
