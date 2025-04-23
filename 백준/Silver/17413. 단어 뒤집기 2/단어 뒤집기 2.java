@@ -1,56 +1,83 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.*;
 import java.io.*;
+import java.util.Stack;
 
-class Main{
-    public static void main(String[] args) throws IOException {
+public class Main {
+
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        String str = br.readLine();
-        StringBuilder sb = new StringBuilder();
-        boolean check = false;
-        Stack < Character > stack = new Stack < > ();
+		StringBuilder sb = new StringBuilder();
+		Stack<Character> stack = new Stack<>();
 
-        for (int i = 0; i < str.length(); i++) {
+		String str = br.readLine();
+		int len = str.length();
 
-            if (str.charAt(i) == '<') {
-                while (!stack.isEmpty()) {
-                    sb.append(stack.pop());
-                }
-                check = true;
-            }
-            else if (str.charAt(i) == '>') {
-                check = false;
-                sb.append(str.charAt(i));
-                continue;
-            }
 
-            if (check == true) {
-                sb.append(str.charAt(i));
-            }
+		boolean tag = false;
 
-            else if (check == false) {
+		for(int i=0; i<len; i++){
+			char ch = str.charAt(i);
 
-                if (str.charAt(i) == ' ') {
-                    while (!stack.isEmpty()) {
-                        sb.append(stack.pop());
-                    }
-                    sb.append(' ');
-                    continue;
-                } else {
-                    stack.push(str.charAt(i));
-                }
-            }
+			if(ch == '<'){
+				tag = true;
 
-            if (i == str.length() - 1) {
-                while (!stack.isEmpty()) {
-                    sb.append(stack.pop());
-                }
-            }
-        }
+				if(!stack.isEmpty()){
+					while(!stack.isEmpty()){
+						sb.append(stack.pop());
+					}
+				}
 
-        // 결과문 출력
-        System.out.println(sb);
+				sb.append(ch);
+				continue;
+			}
+
+			//'<' 나왔다면
+			if(tag){
+
+				if(ch == '>'){
+					sb.append(ch);
+					tag = false;
+				}else{
+					sb.append(ch);
+				}
+				continue;
+
+			}else{
+				if(ch == ' '){
+					if(!stack.isEmpty()){
+						while(!stack.isEmpty()){
+							sb.append(stack.pop());
+						}
+						sb.append(ch);
+					}
+				}else{
+					stack.push(ch);
+				}
+
+			}
+		}
+
+		if(!stack.isEmpty()){
+			while(!stack.isEmpty()){
+				sb.append(stack.pop());
+			}
+		}
+
+		System.out.println(sb);
+
+
+
+
+
+
+
+
+
+
+
+		
     }
+
+
+
 }
