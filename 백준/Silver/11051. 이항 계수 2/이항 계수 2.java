@@ -22,15 +22,15 @@ public class Main {
 
     static int getC(int n, int k){
 
-        if(arr[n][k] != 0) return arr[n][k];
+      if(arr[n][k] != 0) return arr[n][k];
 
-        if(n==k || k == 0){
-            arr[n][k] = 1;
-        }else{
-            arr[n][k] = (getC(n-1, k-1) + getC(n-1, k)) % 10007;
-        }
+      if(n==k || k == 0){
+        arr[n][k] = 1;
+      }else{
+        arr[n][k] = (getC(n-1, k-1) + getC(n-1, k)) % 10007;
+      }
 
-        return arr[n][k];
+      return arr[n][k];
     }
 
 }
