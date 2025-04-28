@@ -1,19 +1,18 @@
 import java.io.*;
-import java.util.*;
+import java.util.Stack;
 
 public class Main {
-
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
 		
-		
 		for(int i=0; i<n; i++){
 			String str = br.readLine();
+
 			Stack<Character> left = new Stack<>();
 			Stack<Character> right = new Stack<>();
-			
+
 			for(char ch : str.toCharArray()){
 
 				switch(ch){
@@ -29,7 +28,6 @@ public class Main {
 					}
 					break;
 
-
 					case '-':
 					if(!left.isEmpty()){
 						left.pop();
@@ -39,8 +37,8 @@ public class Main {
 					default:
 					left.push(ch);
 					break;
-				}
 
+				}
 			}
 
 			StringBuilder sb = new StringBuilder();
@@ -52,16 +50,14 @@ public class Main {
 				sb.append(right.pop());
 			}
 
-
 			System.out.println(sb);
 
 
 		}
 
-		
 
-		
-    }
 
+
+
+	}
 }
-
