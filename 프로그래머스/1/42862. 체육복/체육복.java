@@ -2,35 +2,37 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-     
-        //잃어버린 사람 빼기
+        
+        //체육복 갖고 있는 학생 초기화
         int answer = n - lost.length;
         
         Arrays.sort(lost);
         Arrays.sort(reserve);
-        
-        //여벌을 챙겨온 사람이 도난당한 경우
+
+        //도난당했지만, 여벌 있는 학생
         for(int i=0; i<lost.length; i++){
             for(int j=0; j<reserve.length; j++){
-                if(reserve[j] == lost[i]){
+                if(lost[i] == reserve[j]){
+                    lost[i] = -1;
+                    reserve[j] = -1;
                     answer++;
-                    lost[i] = reserve[j] = -1;
                     break;
-                    
                 }
             }
         }
         
-        //체육복을 return
-        for(int lostPerson : lost) {
-            for(int i=0; i<reserve.length; i++){
-                if(reserve[i] == lostPerson +1 || reserve[i] == lostPerson -1){
-                    answer ++;
-                    reserve[i] = -1;
+        
+        //옷 빌려주기
+        for(int i=0; i<lost.length; i++){
+            for(int j=0; j<reserve.length; j++){
+                if(reserve[j] == lost[i] - 1|| reserve[j] == lost[i] + 1){
+                    answer++;
+                    reserve[j] = -1;
                     break;
                 }
             }
         }
+        
         return answer;
 
     }
