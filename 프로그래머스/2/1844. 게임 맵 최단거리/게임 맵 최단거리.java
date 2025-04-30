@@ -1,56 +1,56 @@
 import java.util.*;
 
 class Solution {
+    
+    static int n,m;
     static boolean[][] visited;
     static int[] dy = new int[]{-1,0,0,1};
     static int[] dx = new int[]{0,-1,1,0};
     
+    static class Point{
+        int y;
+        int x;
+        
+        Point(int y, int x){
+            this.y = y;
+            this.x = x;
+        }
+    }
+    
     public int solution(int[][] maps) {
         int answer = 0;
-        visited = new boolean[maps.length][maps[0].length];
+        n = maps.length;
+        m = maps[0].length;
+        visited = new boolean[n][m];
         
-        bfs(0,0, maps);
+        bfs(maps);
         
-        if(maps[maps.length-1][maps[0].length-1] <=1){
-            answer = -1;
-        }else{
-            answer = maps[maps.length-1][maps[0].length-1];
-        }
-        
-        
+        answer= maps[n-1][m-1] > 1 ? maps[n-1][m-1] : -1;
         return answer;
     }
     
-    public void bfs(int y, int x, int[][] maps){
-        Queue<Loc> q = new LinkedList<>();
-        q.add(new Loc(y,x));
-        visited[y][x] =true;
+    static void bfs(int[][] maps){
+        
+        Queue<Point> q = new LinkedList<>();
+        q.add(new Point(0,0));
+        visited[0][0] = true;
         
         while(!q.isEmpty()){
-            Loc now = q.poll();
+            Point now = q.poll();
             
             for(int i=0; i<4; i++){
                 int ny = now.y + dy[i];
                 int nx = now.x + dx[i];
                 
-                if(0<=ny && ny < maps.length && 0<= nx && nx < maps[0].length
-                  && !visited[ny][nx] && maps[ny][nx] == 1){
-                    visited[ny][nx] = true;
-                    q.add(new Loc(ny, nx));
-                    maps[ny][nx] = maps[now.y][now.x] + 1;
+                if(0<=ny && ny < n && 0<=nx && nx < m && maps[ny][nx] == 1){
+                    if(!visited[ny][nx]){
+                        visited[ny][nx] = true;
+                        maps[ny][nx] = maps[now.y][now.x] + 1;
+                        q.add(new Point(ny,nx));
+                    }
                 }
             }
-            
         }
-    }
-    
-    public class Loc{
-        int y;
-        int x;
         
-        public Loc(int y, int x){
-            this.y = y;
-            this.x = x;
-        }
     }
 }
