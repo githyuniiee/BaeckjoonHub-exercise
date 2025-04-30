@@ -1,63 +1,49 @@
 import java.util.*;
 
 class Solution {
-    
+
     static boolean[] visited;
+    static int len;
     static int answer = Integer.MAX_VALUE;
-    
+
     public int solution(String begin, String target, String[] words) {
         
-        visited = new boolean[words.length];
+        len = words.length;
+        visited = new boolean[len];
         
-        boolean containsTarget = false;
-        for(String word : words){
-            if(word.equals(target)){
-                containsTarget = true;
-                break;
-            }
-        }
+        dfs(begin, target, 0, words);
         
-        if(!containsTarget) return 0;
-        
-        dfs(begin, target, words, 0);
-        
-        
+        answer = answer == Integer.MAX_VALUE ? 0 : answer;
         return answer;
     }
     
-    static void dfs(String begin, String target, String[] words, int cnt){
+    static void dfs(String begin, String target, int depth, String[] words){
         
-        if(begin.equals(target)){
-            answer = Math.min(answer, cnt);
+        if(depth == len){
             return;
         }
         
-        
-        for(int i=0; i<words.length; i++){
-            String str = words[i];
-            
-            if(!visited[i]){
-                int c = 0;
-                
-                for(int j=0; j<begin.length(); j++){
-                   if(str.charAt(j) == begin.charAt(j)){
-                       c++;
-                   }
-                }
-                
-                
-                if(c == str.length() - 1){
-                    visited[i] = true;
-                    dfs(str, target, words, cnt + 1);
-                    visited[i] = false;
-                }
-                
-            }
-            
-            
+        if(begin.equals(target)){
+            answer = Math.min(answer, depth);
+            return;
         }
-       
         
-        
+        for(int i=0; i<len; i++){
+            if(!visited[i]){
+                String str = words[i];
+                int cnt = 0;
+                for(int j=0; j<str.length(); j++){
+                    if(begin.charAt(j) == str.charAt(j)){
+                        cnt++;
+                    }
+                }
+                
+                if(cnt == str.length() - 1){
+                    visited[i] = true;
+                    dfs(str, target, depth + 1, words);
+                    visited[i] = false;         
+                }
+            }
+        }
     }
 }
