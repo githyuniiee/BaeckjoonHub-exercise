@@ -2,16 +2,17 @@ import java.util.*;
 
 class Solution {
     
-    static int[] parents;
+    static int[] parent;
     
     public int solution(int n, int[][] costs) {
-        int answer = 0;
-        parents = new int[n];
         
-        Arrays.sort(costs, (o1,o2) ->o1[2] - o2[2]);
+        int answer = 0;
+        parent = new int[n];
+        
+        Arrays.sort(costs, (o1,o2) -> o1[2] - o2[2]);
         
         for(int i=0; i<n; i++){
-            parents[i] = i;
+            parent[i] = i;
         }
         
         for(int i=0; i<costs.length; i++){
@@ -19,15 +20,8 @@ class Solution {
                 answer += costs[i][2];
             }
         }
-        
-        
+               
         return answer;
-    }
-    
-    static int find(int x){
-        if(parents[x] == x) return x;
-        
-        return find(parents[x]);
     }
     
     static boolean union(int a, int b){
@@ -35,7 +29,13 @@ class Solution {
         int pb = find(b);
         
         if(pa == pb) return false;
-        parents[pa] = pb;
-        return true; 
+        parent[pa] = pb;
+        return true;
+    }
+    
+    static int find(int x){
+        if(parent[x] == x) return x;
+        
+        return find(parent[x]);
     }
 }
