@@ -1,26 +1,32 @@
-import java.util.HashMap;
+import java.util.*;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        HashMap<String, Integer> map = new HashMap<>();
-
-        // 참가자 명단을 해시맵에 추가하며 카운트 증가
-        for (String name : participant) {
+        String answer = "";
+        Map<String, Integer> map = new HashMap<>();
+        
+        for(int i=0; i<participant.length; i++){
+            String name = participant[i];
+            
             map.put(name, map.getOrDefault(name, 0) + 1);
         }
-
-        // 완주자 명단에 따라 카운트 감소
-        for (String name : completion) {
-            map.put(name, map.get(name) - 1);
-        }
-
-        // 값이 0이 아닌 사람(완주하지 못한 사람)을 찾기
-        for (String name : map.keySet()) {
-            if (map.get(name) != 0) {
-                return name;
+        
+        for(int i=0; i<completion.length; i++){
+            String name = completion[i];
+            
+            if(map.containsKey(name) ){
+                map.put(name, map.getOrDefault(name, 0) - 1);
+                
+                if(map.get(name) == 0){
+                    map.remove(name);
+                }
             }
+            
         }
-
-        return ""; // 완주하지 못한 사람이 없는 경우 (문제 조건에서는 발생하지 않음)
+        
+        for(String name : map.keySet()){
+            answer += name;
+        }
+        return answer;
     }
 }
