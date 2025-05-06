@@ -1,55 +1,50 @@
 import java.util.*;
 
 class Solution {
-    static Set<Integer> set;
-    static boolean[] visited;
-    public int solution(String numbers) {
-        int answer = 0;
-        set = new HashSet<>();
-        visited = new boolean[7];
-        
-        dfs(numbers, "", 0);
-        
-        for(Integer num : set){
-            if(isPrime(num)){
-                answer++;
-            }
+    
+    static HashSet<Integer> set = new HashSet<>();
+    
+    static void recursive(String comb, String others){
+        //1.현재 조합 set에 추가
+        if(!comb.equals("")){
+            set.add(Integer.parseInt(comb));
         }
-        
-        return answer;
+   
+        //2. 남은 숫자 중 하나 더해서 새로운 조합
+        for(int i=0; i<others.length(); i++){
+            recursive(comb + others.charAt(i), others.substring(0,i) + others.substring(i+1));
+        }
+       
     }
     
-    public void dfs(String numbers, String str, int depth){
-        if(depth > numbers.length()){
-            return;
-        }
+    static boolean isPrime(int num){
+        if(num == 0 || num == 1) return false;
         
-        for(int i=0; i<numbers.length(); i++){
-            if(!visited[i]){
-                visited[i] = true;
-                set.add(Integer.parseInt(str + numbers.charAt(i)));
-                dfs(numbers, str+numbers.charAt(i), depth +1);
-                visited[i] = false;
-            }
-        }
-    }
-    
-    
-    
-    
-    public boolean isPrime(int num){
+        int limit = (int)Math.sqrt(num);
         
-        if(num <2){
-            return false;
-        }
-        
-        for(int i=2; i<=Math.sqrt(num); i++){
-            if(num % i == 0){
-                return false;
-            }
+        for(int i=2; i<=limit; i++){
+            if(num % i == 0) return false;
         }
         
         return true;
-        
     }
+    
+    public int solution(String numbers) {
+        int count = 0;
+        
+        //모든 조합 수 만들기
+        recursive("", numbers);
+        //소수 개수 세기
+        Iterator<Integer> it = set.iterator();
+        while(it.hasNext()){
+            int number = it.next();
+            if(isPrime(number)){
+                count++;
+            }
+        }
+        
+        //소수 개수 반환
+        return count;
+    }
+
 }
