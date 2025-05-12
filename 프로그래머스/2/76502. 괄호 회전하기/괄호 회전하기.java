@@ -1,44 +1,36 @@
 import java.util.*;
+
 class Solution {
     public int solution(String s) {
-        
-        List<Character> list = new ArrayList<>();
-        Stack<Character> stack = new Stack<>();
         int answer = 0;
         
         for(int i=0; i<s.length(); i++){
-            list.add(s.charAt(i));
-        }
-        
-        for(int i=0; i<s.length(); i++){
             
-            for(int j=0; j<s.length(); j++){
+            Stack<Character> stack = new Stack<>();
+            String str = s.substring(i,s.length()) + s.substring(0,i);
+            
+            for(int j=0; j<str.length(); j++){
+              
+                char ch = str.charAt(j);
                 
                 if(stack.isEmpty()){
-                    stack.push(list.get(j));
+                    stack.push(ch);
                 }else{
-                    if((stack.peek() == '[' && list.get(j) == ']')
-                       || (stack.peek() == '(' && list.get(j) == ')')
-                       || (stack.peek() == '{' && list.get(j) == '}')){
+                    if(stack.peek()=='(' && ch == ')'){
                         stack.pop();
-            
+                    }else if(stack.peek()=='[' && ch == ']'){
+                        stack.pop();
+                    }else if(stack.peek()=='{' && ch == '}'){
+                        stack.pop();
                     }else{
-                        stack.push(list.get(j));
-                    }
-                        
+                        stack.push(ch);
                     }
                 }
             
-            
-            if(stack.isEmpty()){
-                answer++;
             }
-            stack.clear();
-            
-            list.add(list.get(0));
-            list.remove(0);
+             if(stack.isEmpty()) {answer++;}
         }
-            
+        
         return answer;
     }
 }
