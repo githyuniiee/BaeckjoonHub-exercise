@@ -1,33 +1,37 @@
+import java.util.*;
+
 class Solution {
-    int[] answer;
+    int zeroCnt = 0;
+    int oneCnt = 0;
     
     public int[] solution(int[][] arr) {
-        answer = new int[2];
-        quadZip(arr, 0, 0, arr.length);
-        return answer;
+        compress(arr, 0, 0, arr.length);
+        return new int[]{zeroCnt, oneCnt};
     }
     
-    public void quadZip(int[][] arr, int x, int y, int length){
-        
-        if(zipChk(arr, x, y, length, arr[x][y])){
-            if(arr[x][y] == 1) answer[1]++;
-            else answer[0]++;
+    void compress(int[][] arr, int y, int x, int size){
+        if(isSame(arr, y,x,size)){
+            if(arr[y][x] == 0) zeroCnt++;
+            else oneCnt++;
             return;
         }
         
-        quadZip(arr, x, y, length/2);
-        quadZip(arr, x+length/2, y, length/2);
-        quadZip(arr, x, y+length/2, length/2);
-        quadZip(arr, x+length/2, y+length/2, length/2);
-        
+        int newSize = size / 2;
+        compress(arr, y, x, newSize);                         // 1사분면
+        compress(arr, y, x + newSize, newSize);               // 2사분면
+        compress(arr, y + newSize, x, newSize);               // 3사분면
+        compress(arr, y + newSize, x + newSize, newSize);
     }
     
-    public boolean zipChk(int[][] arr, int x, int y, int length, int arrVal){
-        for(int i=x; i< x + length; i++){
-            for(int j=y; j<y+length; j++){
-                if(arr[i][j] != arrVal) return false;
+    boolean isSame(int[][] arr, int y, int x, int size){
+        int val = arr[y][x];
+        
+        for(int i=y; i<y+size; i++){
+            for(int j=x; j<x+size; j++){
+                if(arr[i][j] != val) return false;
             }
         }
+        
         return true;
     }
 }
