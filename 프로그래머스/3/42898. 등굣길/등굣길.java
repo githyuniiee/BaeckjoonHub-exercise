@@ -1,26 +1,34 @@
 import java.util.*;
- 
+
 class Solution {
     public int solution(int m, int n, int[][] puddles) {
-        int mod = 1000000007;
+        int[][] arr = new int[n+1][m+1];
         
-        int[][] arr = new int[m+1][n+1];
-        
-        //웅덩이 초기화
         for(int i=0; i<puddles.length; i++){
-            arr[puddles[i][0]][puddles[i][1]] = -1;
+            int x = puddles[i][0];
+            int y = puddles[i][1];
+            
+            arr[y][x] = -1; //웅덩이
         }
         
-        //시작 지점
         arr[1][1] = 1;
-        for(int i=1; i<=m; i++){
-            for(int j=1; j<=n; j++){
-                if(arr[i][j] == -1) continue;
-                if(arr[i-1][j] > 0) arr[i][j] += arr[i-1][j] % mod;
-                if(arr[i][j-1] > 0) arr[i][j] += arr[i][j-1] % mod;
+        
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=m; j++){
+                
+                if(arr[i][j] != -1){
+                    
+                    if(arr[i-1][j] != -1) {
+                        arr[i][j] = (arr[i-1][j] + arr[i][j]) % 1000000007;
+                    }
+                    
+                    if(arr[i][j-1] != -1){
+                        arr[i][j] = (arr[i][j-1] + arr[i][j]) % 1000000007;
+                    }
+                }
             }
         }
         
-        return arr[m][n] % mod;
+        return arr[n][m];
     }
 }
