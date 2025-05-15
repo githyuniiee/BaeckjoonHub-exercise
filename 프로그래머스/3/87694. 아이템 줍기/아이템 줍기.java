@@ -1,75 +1,82 @@
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.*;
 
 class Solution {
-    static int[][] map;
-    static int answer;
-    //character->item(목표 포인트)
-    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
-        answer=0;
+    static int[][] arr;
+    static boolean[][] visited;
+    static int[]dy = new int[]{-1,0,0,1};
+    static int[]dx = new int[]{0,-1,1,0};
+    
+    static class Point{
+        int y;
+        int x;
+        int cnt;
         
-        //1) map을 만든다.
-        map= new int[101][101];
-        
-        //2) 좌표에 따라 map에 값을 넣을건데, 테두리에만 1을 넣을것이다.(*좌표는 두배로)
-        for(int i=0; i<rectangle.length; i++){
-            fill(2*rectangle[i][0], 2*rectangle[i][1], 2*rectangle[i][2], 2*rectangle[i][3]);
+        Point(int y, int x, int cnt){
+            this.y = y;
+            this.x = x;
+            this.cnt = cnt;
         }
-        
-        //3) bfs로 테두리 따라 양쪽으로 가보고 min값 채택
-        bfs(2*characterX, 2*characterY, 2*itemX, 2*itemY);
-        
-        return answer/2;
     }
     
-    //x1,y1,x2,y2 => (x1,y1)~(x2,y1), (x1,y2)~(x2,y2), (x1,y1)~(x1,y2), (x2,y1)~(x2,y2)
-    //편하게 x2 해준 좌표를 받는다.
-    public void fill(int x1, int y1, int x2, int y2){
-        for(int i=x1; i<=x2; i++){
-            for(int j=y1; j<=y2; j++){
-                if(map[i][j]==2) continue;
-                if(i==x1||i==x2||j==y1||j==y2){
-                    map[i][j]=1;
-                    continue;
-                }
-                map[i][j]=2;
-            }
-        }
-    }//fill
-    
-    static int[] dx= {-1, 0, 0, 1};
-    static int[] dy= {0, -1, 1, 0};
-    public void bfs(int startx, int starty, int itemx, int itemy){
-        boolean[][] visited= new boolean[101][101];
-        Queue<Integer> queue= new LinkedList<>();
-        queue.add(startx);
-        queue.add(starty);
+    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
+        arr = new int[101][101];
+        visited = new boolean[101][101];
         
-        while(!queue.isEmpty()){
-            int x= queue.poll();
-            int y= queue.poll();
+        for(int i=0; i<rectangle.length; i++){
+            int x1 = rectangle[i][0]*2;
+            int y1 = rectangle[i][1]*2;
+            int x2 = rectangle[i][2]*2;
+            int y2 = rectangle[i][3]*2;
+            
+            for(int j=x1; j<=x2; j++){
+                for(int k=y1; k<=y2; k++){
+                    
+                    if(j == x1 || j == x2 || k == y1 || k == y2){
+                        if(arr[k][j] != -1){
+                            arr[k][j] = 1; //테두리
+                            continue;
+                        }
+                    }
+                    
+                    arr[k][j] = -1; //내부
+                    
+                }
+            }      
+        }
+        
+        int ans = bfs(characterX*2, characterY*2, itemX*2, itemY*2);
+       
+        return ans/2;
+    }
+    
+    static int bfs(int sX, int sY, int eX, int eY){
+        
+        Queue<Point> q = new LinkedList<>();
+        q.add(new Point(sY, sX, 1));
+        visited[sY][sX] = true;
+        
+        while(!q.isEmpty()){
+            Point now = q.poll();
+            
+            if(now.y == eY && now.x == eX){
+                return now.cnt;
+            }
             
             for(int i=0; i<4; i++){
-                int nx= x+dx[i];
-                int ny= y+dy[i];
-                if(!check(nx, ny)) continue; //범위 아웃
-                if(map[nx][ny]!=1||visited[nx][ny]) continue;
+                int ny = now.y + dy[i];
+                int nx = now.x + dx[i];
                 
-                map[nx][ny]=map[x][y]+1;
-                if(nx==itemx&&ny==itemy){ //목표점 도달
-                    // answer= (answer==0)? map[nx][ny]:Math.min(answer,map[nx][ny]);
-                    answer = map[nx][ny];
-                    break;
+                if(0<=ny && ny <101 && 0<=nx && nx <101){
+                    if(!visited[ny][nx] && arr[ny][nx] == 1){
+                    q.add(new Point(ny,nx,now.cnt + 1));
+                    visited[ny][nx] = true;
+                    }    
                 }
-                visited[nx][ny]= true;
-                queue.add(nx);
-                queue.add(ny);
+                
+                
             }
         }
-    }//bfs
-    
-    public boolean check(int x, int y){
-        if(x<0||y<0||x>100||y>100) return false;
-        return true;
+        
+        return -1;
     }
 }
