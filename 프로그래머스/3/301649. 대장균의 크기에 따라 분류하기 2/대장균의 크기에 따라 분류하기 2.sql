@@ -1,18 +1,21 @@
-# -- 코드를 작성해주세요
-# SELECT ID, PERCENT_RANK() OVER (ORDER BY SIZE_OF_COLONY DESC) AS PER
-# FROM ECOLI_DATA
+-- 코드를 작성해주세요
+with RAN as (
+    select ID, percent_rank() over (order by size_of_colony desc) AS PER
+    from ECOLI_DATA
+
+)
 
 
-SELECT A.ID, 
-CASE WHEN B.PER <= 0.25 THEN 'CRITICAL'
-WHEN B.PER <= 0.5 THEN 'HIGH'
-WHEN B.PER <= 0.75 THEN 'MEDIUM'
-ELSE 'LOW'
-END AS COLONY_NAME
-FROM ECOLI_DATA A
-JOIN (
-    SELECT ID, PERCENT_RANK() OVER (ORDER BY SIZE_OF_COLONY DESC) AS PER
-    FROM ECOLI_DATA
-) B
-ON A.ID = B.ID
-ORDER BY ID
+
+# select
+# from ECOLI_DATA
+# where 
+
+select ID, 
+case when per <= 0.25 then 'CRITICAL'
+when per <= 0.5 then 'HIGH'
+when per <= 0.75 then 'MEDIUM'
+when per <= 1 then 'LOW'
+end as COLONY_NAME
+from RAN
+order by ID
