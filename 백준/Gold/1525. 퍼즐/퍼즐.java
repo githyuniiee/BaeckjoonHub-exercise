@@ -3,62 +3,91 @@ import java.util.*;
 
 public class Main {
 
-	static String goal = "123456780";
 	static int[] dy = new int[]{-1,0,0,1};
 	static int[] dx = new int[]{0,-1,1,0};
-	static Map<String, Integer> map = new HashMap<>();
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String init = "";
+	static String goal = "123456780";
 
-		for(int i=0; i<3; i++){
-			String[] arr = br.readLine().split(" ");
-			for(int j=0; j<3; j++){
-				init += arr[j];
-			}
+	static class Point{
+		int y;
+		int x;
+		int cnt;
+		String s;
+
+		Point(int y, int x, int cnt, String s){
+			this.y = y;
+			this.x = x;
+			this.cnt = cnt;
+			this.s = s;
 		}
-		map.put(init, 0);
-		System.out.println(bfs(init));
 	}
 
-	static int bfs(String init){
-		Queue<String> q = new LinkedList<>();
-		q.add(init);
 
-		while(!q.isEmpty()){
-			String now = q.poll();
-			int move = map.get(now);
+	public static void main(String[] args) throws Exception {
 
-			//0위치 찾기
-			int empty = now.indexOf('0');
-			int px = empty % 3;//x좌표
-			int py = empty / 3; //y좌표
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String init = "";
+		int sX = 0;
+		int sY = 0;
 
-			if(now.equals(goal)){
-				return move;
-			}
+		for(int i=0; i<3; i++){
+			String[] str = br.readLine().split(" ");
+			for(int j=0; j<3; j++){
+				init += str[j];
 
-			for(int i=0; i<4; i++){
-				int ny = py + dy[i];
-				int nx = px + dx[i];
-
-				if(0<=ny && ny <3 && 0<= nx && nx < 3){
-					int nPos = ny*3 + nx; //움직일 숫자 인덱스
-					char ch = now.charAt(nPos);
-
-					String next = now.replace(ch, 'c');
-					next = next.replace('0', ch);
-					next = next.replace('c', '0');
-
-
-					if(!map.containsKey(next)){
-						q.add(next);
-						map.put(next, move + 1);
-					}
-
+				//초기 0의 x, y 지점 찾기
+				if(str[j].equals("0")){
+					sX = j;
+					sY = i;
 				}
 			}
 		}
+
+		int ans = bfs(init, sY, sX);
+
+		System.out.println(ans);
+
+	}
+
+	static int bfs(String puzzle, int sY, int sX){
+		Queue<Point> q = new LinkedList<>();
+		Set<String> visited = new HashSet<>();
+	
+		q.add(new Point(sY, sX,0, puzzle));
+		visited.add(puzzle);
+	
+		while(!q.isEmpty()){
+			Point now = q.poll();
+	
+			if(now.s.equals(goal)){
+				return now.cnt;
+			}
+	
+			for(int i=0; i<4; i++){
+				int ny = dy[i] + now.y;
+				int nx = dx[i] + now.x;
+	
+				if(0<=ny && ny < 3 && 0<=nx && nx < 3){
+	
+					int zeroIndex = now.y * 3 + now.x;
+					int swapIndex = ny * 3 + nx;
+	
+					StringBuilder sb = new StringBuilder(now.s);
+					char temp = sb.charAt(swapIndex);
+					sb.setCharAt(swapIndex, '0');
+					sb.setCharAt(zeroIndex, temp);
+	
+					String newPuzzle = sb.toString();
+					
+					if(!visited.contains(newPuzzle)){
+						visited.add(newPuzzle);
+						q.add(new Point(ny, nx, now.cnt + 1, newPuzzle));
+					}
+				}
+			}
+		}
+	
 		return -1;
 	}
+	
+
 }
