@@ -2,49 +2,49 @@ import java.util.*;
 
 class Solution {
     
-    static ArrayList<Integer>[] list;
-    
+    static ArrayList<ArrayList<Integer>> list;
     public int solution(int n, int[][] wires) {
-        int diff = Integer.MAX_VALUE;
-        
-        list = new ArrayList[n+1];
+        int answer = Integer.MAX_VALUE;
+        list = new ArrayList<>();
         
         for(int i=0; i<=n; i++){
-            list[i] = new ArrayList<>();
+            list.add(new ArrayList<>());
         }
         
         for(int i=0; i<wires.length; i++){
             int start = wires[i][0];
             int end = wires[i][1];
             
-            list[start].add(end);
-            list[end].add(start);
+            list.get(start).add(end);
+            list.get(end).add(start);
         }
         
         for(int i=0; i<wires.length; i++){
             int start = wires[i][0];
             int end = wires[i][1];
-            
-            list[start].remove(Integer.valueOf(end));
-            list[end].remove(Integer.valueOf(start));
             
             boolean[] visited = new boolean[n+1];
             
-            int cnt = dfs(1, visited);
-            diff = Math.min(diff, (Math.abs(cnt - (n - cnt))));
+            //삭제
+            list.get(start).remove(Integer.valueOf(end));
+            list.get(end).remove(Integer.valueOf(start));
             
-            list[start].add(end);
-            list[end].add(start);
+            int cnt = dfs(1, visited);
+            int remain = Math.abs(n - cnt);
+            answer = Math.min(answer, Math.abs(cnt - remain));
+            
+            //되돌리기
+            list.get(start).add(end);
+            list.get(end).add(start);
         }
-        
-        return diff;
+        return answer;
     }
     
     static int dfs(int num, boolean[] visited){
         visited[num] = true;
         int cnt = 1;
         
-        for(int next : list[num]){
+        for(int next : list.get(num)){
             if(!visited[next]){
                 cnt += dfs(next, visited);
             }
