@@ -1,33 +1,32 @@
 import java.util.*;
 
 class Solution {
-    static char[] arr = new char[]{'A', 'E', 'I', 'O', 'U'};
-    static int idx = 0;
+    static char[] alpha = {'A', 'E', 'I', 'O', 'U'};
     static int answer = 0;
+    static int cnt = 0;
     
     public int solution(String word) {
         
-        dfs("", word);
-        
+        dfs(0, "", word);
         return answer;
     }
     
-    static void dfs(String str, String word){
-        
-        if(str.length() > 5){
-            return;
-        }
+    static void dfs(int depth, String str, String word){
         
         if(str.equals(word)){
-            answer = idx;
+            answer = cnt;
             return;
         }
         
-        idx++;
+        cnt++;
         
-        for(int i=0; i<5; i++){
-            dfs(str + arr[i], word);
+        if(depth >= 5){
+            return;
         }
-    
+        
+        for(int i=0; i<alpha.length; i++){
+            dfs(depth + 1, str + alpha[i], word);
+        }
+        
     }
 }
