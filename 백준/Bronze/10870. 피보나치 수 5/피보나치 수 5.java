@@ -1,30 +1,22 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.ArrayList;
+public class Main{
 
+	static ArrayList<Integer> arr = new ArrayList<>();
 
-
-public class Main {
-
-
-
-    public static long recur(int number){
-
-        if (number == 0) return 0;
-        if (number == 1) return 1;
-
-        return recur(number - 1) + recur(number - 2);
-
-
-    }
-
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args)throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+		int n = Integer.parseInt(br.readLine());
 
-        System.out.println(recur(N));
+		int[] dp = new int[21];
 
-    }
+		dp[1] = 1;
+		
+		for(int i=2; i<=20; i++){
+			dp[i] = dp[i-1] + dp[i-2];
+		}
+
+		System.out.println(dp[n]);
+	
+	}	
 }
